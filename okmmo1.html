@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر شحن الألعاب والتطبيقات الاحترافي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        },
+                        dark: {
+                            900: '#0b0f19',
+                            800: '#111827',
+                            700: '#1f2937',
+                            600: '#374151'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
+        .glass-card { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-nav { background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+        .active-tab { background-color: #2563eb; color: #ffffff; box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39); }
+        .glow-effect { box-shadow: 0 0 25px -5px rgba(59, 130, 246, 0.3); }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0b0f19; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #374151; }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); }
+        }
+        .animate-glow { animation: pulseGlow 3s infinite ease-in-out; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
+
+    <!-- Top Bar Notice -->
+    <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 text-xs py-1.5 px-4 text-center text-blue-200 border-b border-blue-800/40 flex justify-between items-center">
+        <span class="max-w-4xl mx-auto flex items-center justify-center gap-2">
+            <span class="flex h-2 w-2 relative">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span>شحن فورى وآمن 100% طوال 24 ساعة - خصومات حتى 20% على جميع باقات ألعاب الموبايل!</span>
+        </span>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <nav class="glass-nav sticky top-0 z-40 px-4 py-3">
+        <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center space-x-3 space-x-reverse cursor-pointer" onclick="switchView('store')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-blue-500/30">
+                    <i class="fa-solid fa-gamepad"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-black bg-gradient-to-r from-white via-blue-100 to-blue-400 bg-clip-text text-transparent">فلاش تشارج | FlashCharge</h1>
+                    <p class="text-[10px] text-slate-400 -mt-1 font-semibold">متجر شحن الألعاب والتطبيقات</p>
+                </div>
+            </div>
+
+            <!-- Nav Actions -->
+            <div class="flex items-center space-x-2 space-x-reverse bg-slate-900/80 p-1.5 rounded-xl border border-slate-800">
+                <button onclick="switchView('store')" id="nav-store" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition duration-200 active-tab flex items-center gap-1.5">
+                    <i class="fa-solid fa-store text-sm"></i>
+                    <span>المتجر</span>
+                </button>
+                <button onclick="switchView('track')" id="nav-track" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition duration-200 text-slate-400 hover:text-white flex items-center gap-1.5">
+                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                    <span>تتبع الطلب</span>
+                </button>
+                <button onclick="switchView('admin')" id="nav-admin" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition duration-200 text-slate-400 hover:text-white flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-shield text-sm"></i>
+                    <span>لوحة التحكم</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content View -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- Toast Notification Container -->
+        <div id="toast-container" class="fixed bottom-5 left-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+        <!-- STORE VIEW -->
+        <div id="store-view" class="space-y-8">
+            <!-- Hero Banner Slider / Offer -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 p-6 md:p-8 border border-blue-800/30 glow-effect">
+                <div class="absolute -top-24 -left-24 w-64 h-64 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div class="space-y-3 text-center md:text-right max-w-xl">
+                        <span class="bg-blue-500/10 text-blue-400 text-xs px-3 py-1 rounded-full border border-blue-500/20 font-bold inline-block">
+                            <i class="fa-solid fa-bolt text-amber-400 ml-1"></i> شحن أوتوماتيكي ومباشر بالـ ID
+                        </span>
+                        <h2 class="text-2xl md:text-3xl font-black text-white leading-relaxed">
+                            اشحن جواهر وشدات ألعابك المفضلـة بأسرع وقت وأقل سعر
+                        </h2>
+                        <p class="text-xs md:text-sm text-slate-300">
+                            خدمة موثوقة 100% لدعم كافة الألعاب الشائعة (PUBG, Free Fire, Mobile Legends, PartyU) والتطبيقات مع دعم فوري لوسائل الدفع المحلية.
+                        </p>
+                    </div>
+
+                    <!-- Search Bar & Filters -->
+                    <div class="w-full md:w-auto flex flex-col gap-3 min-w-[280px]">
+                        <div class="relative">
+                            <i class="fa-solid fa-search absolute right-3.5 top-3.5 text-slate-400 text-sm"></i>
+                            <input type="text" id="game-search" oninput="filterGames()" placeholder="ابحث عن لعبتك أو تطبيقك..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl pr-10 pl-4 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition">
+                        </div>
+                        <div class="flex gap-1.5 overflow-x-auto pb-1 text-[11px]" id="category-filters">
+                            <button onclick="setCategoryFilter('all')" class="cat-filter active-cat px-3 py-1.5 rounded-lg bg-blue-600 text-white font-bold whitespace-nowrap">الكل</button>
+                            <button onclick="setCategoryFilter('games')" class="cat-filter px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white font-bold whitespace-nowrap">الألعاب</button>
+                            <button onclick="setCategoryFilter('apps')" class="cat-filter px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white font-bold whitespace-nowrap">التطبيقات</button>
+                            <button onclick="setCategoryFilter('cards')" class="cat-filter px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white font-bold whitespace-nowrap">بطاقات شحن</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Games Grid Catalog -->
+            <div>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-fire text-amber-500"></i>
+                        <span>الألعاب والتطبيقات المتاحة</span>
+                    </h3>
+                    <span id="catalog-count" class="text-xs text-slate-400 font-semibold">جارِ التحميل...</span>
+                </div>
+                
+                <div id="game-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <!-- Dynamic Game Cards Inserted JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ORDER TRACKING VIEW -->
+        <div id="track-view" class="hidden space-y-6 max-w-2xl mx-auto">
+            <div class="glass-card p-6 md:p-8 rounded-3xl border border-slate-800 text-center space-y-4">
+                <div class="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-2xl flex items-center justify-center mx-auto text-xl">
+                    <i class="fa-solid fa-truck-fast"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-white">متابعة حالة الطلب</h3>
+                    <p class="text-xs text-slate-400 mt-1">أدخل رقم الطلب المكون من 6 أرقام لمتابعة مرحلة تنفيذ شحن حسابك</p>
+                </div>
+
+                <div class="flex gap-2 max-w-md mx-auto">
+                    <input type="text" id="track-id-input" placeholder="مثال: ORD-748392" class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-center font-mono text-white focus:outline-none focus:border-blue-500">
+                    <button onclick="trackOrder()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition">
+                        استعلام
+                    </button>
+                </div>
+
+                <div id="recent-search-chips" class="flex flex-wrap items-center justify-center gap-1.5 pt-2 text-xs text-slate-400">
+                    <span>طلباتك الأخيرة:</span>
+                    <span id="chips-list" class="flex gap-1.5">
+                        <span class="text-slate-500 text-[11px]">لا توجد عمليات بحث سابقة</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Order Tracking Dynamic Result Output -->
+            <div id="track-result" class="hidden glass-card p-6 rounded-3xl border border-slate-800 space-y-6"></div>
+        </div>
+
+        <!-- ADMIN VIEW -->
+        <div id="admin-view" class="hidden space-y-6">
+            <!-- Admin Top Stats Dashboard -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-card p-4 rounded-2xl border border-slate-800">
+                    <div class="text-xs text-slate-400 font-semibold mb-1">إجمالي الطلبات</div>
+                    <div id="stat-total-orders" class="text-xl font-black text-white">0</div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl border border-slate-800">
+                    <div class="text-xs text-slate-400 font-semibold mb-1">طلبات جديدة</div>
+                    <div id="stat-pending-orders" class="text-xl font-black text-amber-400">0</div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl border border-slate-800">
+                    <div class="text-xs text-slate-400 font-semibold mb-1">طلبات مكتملة</div>
+                    <div id="stat-completed-orders" class="text-xl font-black text-emerald-400">0</div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl border border-slate-800">
+                    <div class="text-xs text-slate-400 font-semibold mb-1">إجمالي المبيعات</div>
+                    <div id="stat-total-revenue" class="text-xl font-black text-blue-400">0 ج.م</div>
+                </div>
+            </div>
+
+            <!-- Admin Action Navigation Tabs -->
+            <div class="glass-card p-4 md:p-6 rounded-3xl border border-slate-800 space-y-4">
+                <div class="flex flex-wrap justify-between items-center gap-3 pb-3 border-b border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-blue-400"></i>
+                        <h2 class="text-lg font-bold text-white">إدارة المتجر والطلبات</h2>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openAddGameModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>إضافة عنصر جديد</span>
+                        </button>
+                        <button onclick="resetStoreData()" class="bg-red-500/10 text-red-400 hover:bg-red-500/20 text-xs font-bold px-3 py-2 rounded-xl border border-red-500/30 transition">
+                            إعادة ضبط العينة
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search & Filters in Admin -->
+                <div class="flex flex-wrap md:flex-nowrap gap-3">
+                    <input type="text" id="admin-search" oninput="renderAdminOrders()" placeholder="بحث برقم الطلب أو Player ID..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    <select id="admin-filter-status" onchange="renderAdminOrders()" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-300 focus:outline-none">
+                        <option value="all">جميع الحالات</option>
+                        <option value="جديد">جديد</option>
+                        <option value="قيد المراجعة">قيد المراجعة</option>
+                        <option value="جاري الشحن">جاري الشحن</option>
+                        <option value="تم">مكتمل (تم)</option>
+                        <option value="مرفوض">مرفوض</option>
+                    </select>
+                </div>
+
+                <!-- Orders List Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-xs">
+                        <thead class="bg-slate-900 text-slate-400 border-b border-slate-800">
+                            <tr>
+                                <th class="p-3">رقم الطلب</th>
+                                <th class="p-3">العنصر الباقة</th>
+                                <th class="p-3">Player ID</th>
+                                <th class="p-3">المبلغ</th>
+                                <th class="p-3">وسيلة الدفع</th>
+                                <th class="p-3">الإشعار</th>
+                                <th class="p-3">الحالة</th>
+                                <th class="p-3 text-center">التحكم</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-orders-list" class="divide-y divide-slate-800/60">
+                            <!-- Dynamic Admin Orders JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ORDER FORM / CHECKOUT MODAL -->
+    <div id="order-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-card bg-slate-950 rounded-3xl max-w-lg w-full p-6 relative border border-slate-800 max-h-[92vh] overflow-y-auto space-y-4">
+            <button onclick="closeModal('order-modal')" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+
+            <div id="modal-header" class="text-center space-y-1"></div>
+
+            <form id="topup-form" onsubmit="handleFormSubmit(event)" class="space-y-4 pt-2">
+                
+                <!-- Package Selection -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-2">1. اختر الباقة المناسبة:</label>
+                    <div id="package-options" class="grid grid-cols-2 gap-2"></div>
+                </div>
+
+                <!-- Player Identification -->
+                <div class="space-y-2">
+                    <label class="block text-xs font-bold text-slate-300">2. المعرف الخاص بك (Player ID):</label>
+                    <div class="relative">
+                        <input type="text" id="player-id" required placeholder="أدخل ID الحساب هنا..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
+                    <p class="text-[10px] text-slate-400 flex items-center gap-1">
+                        <i class="fa-solid fa-circle-info text-blue-400"></i>
+                        <span>تأكد من كتابة الـ ID بشكل صحيح لتجنب التأخير في الشحن.</span>
+                    </p>
+                </div>
+
+                <!-- Payment Method Selection -->
+                <div class="space-y-2">
+                    <label class="block text-xs font-bold text-slate-300">3. طريقة الدفع المتاحة:</label>
+                    <div class="grid grid-cols-1 gap-2" id="payment-methods-grid">
+                        <button type="button" onclick="selectPaymentMethod('vodafone')" id="pay-btn-vodafone" class="pay-method-btn p-3 rounded-xl border border-red-500/50 bg-red-500/10 text-xs font-bold text-center transition flex items-center justify-center gap-2 text-white">
+                            <i class="fa-solid fa-mobile-screen text-base text-red-500"></i>
+                            <span>فودافون كاش (Vodafone Cash)</span>
+                        </button>
+                    </div>
+
+                    <!-- Payment Transfer Box Info -->
+                    <div class="bg-blue-950/40 border border-blue-800/60 p-3.5 rounded-2xl space-y-2 text-xs">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300 font-bold" id="pay-method-title">تحويل عبر فودافون كاش:</span>
+                            <button type="button" onclick="copyWalletNumber()" class="text-[11px] bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1 rounded-lg font-semibold transition">
+                                <i class="fa-regular fa-copy ml-1"></i> نسخ الرقم
+                            </button>
+                        </div>
+                        <div class="font-mono text-amber-300 text-sm font-bold bg-slate-900/80 p-2 rounded-xl text-center border border-slate-800" id="wallet-number-display">
+                            01091950849
+                        </div>
+                        <p class="text-[10px] text-slate-400 leading-relaxed" id="pay-method-desc">
+                            يرجى تحويل المبلغ المطلـوب كاملاً إلى الرقم أعلاه، ثم إرفاق صورة إشعار التحويل بالأسفل.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Proof Attachment Input -->
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold text-slate-300">4. إثبات الدفع (لقطة شاشة التحويل):</label>
+                    <input type="file" id="payment-proof" accept="image/*" required class="w-full text-xs text-slate-400 file:ml-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:bg-blue-600 file:text-white file:font-bold hover:file:bg-blue-500 cursor-pointer bg-slate-900 rounded-xl p-1 border border-slate-800">
+                </div>
+
+                <!-- Submit Action Button -->
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 font-bold text-sm text-white rounded-xl transition shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>تأكيد الطلب وإرسال للمراجعة</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- IMAGE LIGHTBOX / PROOF MODAL -->
+    <div id="proof-lightbox" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="relative max-w-xl w-full text-center space-y-3">
+            <button onclick="closeModal('proof-lightbox')" class="absolute -top-10 left-0 text-white hover:text-slate-300 text-2xl font-bold">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h4 class="text-sm font-bold text-slate-200">صورة إشعار الدفع المرفق</h4>
+            <div class="bg-slate-900 p-2 rounded-2xl border border-slate-800 inline-block max-h-[80vh] overflow-hidden">
+                <img id="lightbox-img" src="" alt="Proof Screenshot" class="max-h-[70vh] object-contain rounded-xl mx-auto">
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD NEW GAME MODAL (ADMIN) -->
+    <div id="add-game-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-card bg-slate-950 rounded-3xl max-w-md w-full p-6 relative border border-slate-800 space-y-4">
+            <button onclick="closeModal('add-game-modal')" class="absolute top-4 left-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-plus-circle text-emerald-400"></i>
+                <span>إضافة عنصر جديد للمتجر</span>
+            </h3>
+
+            <form id="add-game-form" onsubmit="handleAddGameSubmit(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">اسم اللعبة / التطبيق:</label>
+                    <input type="text" id="new-game-name" required placeholder="مثال: روبلوكس (Roblox)" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">الفئة:</label>
+                    <select id="new-game-cat" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none">
+                        <option value="games">ألعاب (Games)</option>
+                        <option value="apps">تطبيقات بث (Apps)</option>
+                        <option value="cards">بطاقات شحن (Cards)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">رمز الأيقونة (FontAwesome Icon):</label>
+                    <input type="text" id="new-game-icon" placeholder="fa-cube" value="fa-gamepad" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none font-mono">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">الباقات (باقة لكل سطر - الكمية:السعر):</label>
+                    <textarea id="new-game-packages" rows="3" required placeholder="100 روبوكس:50 ج.م&#10;500 روبوكس:220 ج.م" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none font-mono"></textarea>
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition">
+                    حفظ وإضافة للمتجر
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950/60 py-6 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-blue-500 text-sm"></i>
+                <span>جميع الحقوق محفوظة © 2026 - منصة شحن الألعاب والتطبيقات</span>
+            </div>
+            <div class="flex gap-4 text-slate-400">
+                <a href="#" onclick="showToast('info', 'خدمة العملاء متوفرة عبر واتساب 24/7')" class="hover:text-white transition">الدعم الفني</a>
+                <a href="#" onclick="showToast('info', 'الشروط والأحكام تنطبق على جميع العمليات')" class="hover:text-white transition">سياسة الاستخدام</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Default Sample Games Catalog Data
+        const DEFAULT_GAMES = [
+            {
+                id: 'pubg',
+                name: 'ببجي موبايل (PUBG Mobile)',
+                category: 'games',
+                icon: 'fa-crosshairs',
+                badge: 'الأكثر طلباً',
+                color: 'from-amber-500 to-orange-600',
+                packages: [
+                    { qty: '60 شدة (UC)', price: '45 ج.م' },
+                    { qty: '325 شدة (UC)', price: '210 ج.م' },
+                    { qty: '660 شدة (UC)', price: '415 ج.م' },
+                    { qty: '1800 شدة (UC)', price: '1050 ج.م' }
+                ]
+            },
+            {
+                id: 'freefire',
+                name: 'فري فاير (Free Fire)',
+                category: 'games',
+                icon: 'fa-fire-flame-curved',
+                badge: 'خصم 15%',
+                color: 'from-red-500 to-amber-600',
+                packages: [
+                    { qty: '100+10 جوهرة', price: '38 ج.م' },
+                    { qty: '530+53 جوهرة', price: '190 ج.م' },
+                    { qty: '1080+108 جوهرة', price: '370 ج.م' }
+                ]
+            },
+            {
+                id: 'partyu',
+                name: 'بارتي يو (PartyU)',
+                category: 'apps',
+                icon: 'fa-icons',
+                badge: 'تسليم فورى',
+                color: 'from-purple-500 to-pink-600',
+                packages: [
+                    { qty: '11,000 كوينز', price: '50 ج.م' },
+                    { qty: '22,000 كوينز', price: '100 ج.م' },
+                    { qty: '55,000 كوينز', price: '250 ج.م' }
+                ]
+            },
+            {
+                id: 'emu',
+                name: 'إيمو (Emu Diamonds)',
+                category: 'apps',
+                icon: 'fa-gem',
+                badge: 'شحن ID',
+                color: 'from-cyan-500 to-blue-600',
+                packages: [
+                    { qty: '1,000 ماسة', price: '1,000 ج.م' },
+                    { qty: '2,000 ماسة', price: '2,000 ج.م' },
+                    { qty: '5,000 ماسة', price: '5,000 ج.م' }
+                ]
+            },
+            {
+                id: 'mobilelegends',
+                name: 'موبايل ليجندز (Mobile Legends)',
+                category: 'games',
+                icon: 'fa-shield-halved',
+                badge: 'شحن مباشر',
+                color: 'from-blue-600 to-indigo-700',
+                packages: [
+                    { qty: '86 ماسة', price: '60 ج.م' },
+                    { qty: '172 ماسة', price: '120 ج.م' },
+                    { qty: '257 ماسة', price: '175 ج.م' }
+                ]
+            },
+            {
+                id: 'bigolive',
+                name: 'بيجو لايف (Bigo Live)',
+                category: 'apps',
+                icon: 'fa-video',
+                badge: 'رسمي',
+                color: 'from-teal-400 to-emerald-600',
+                packages: [
+                    { qty: '100 ماسة', price: '85 ج.م' },
+                    { qty: '500 ماسة', price: '420 ج.م' },
+                    { qty: '1000 ماسة', price: '830 ج.م' }
+                ]
+            }
+        ];
+
+        // State variables
+        let games = JSON.parse(localStorage.getItem('store_games') || JSON.stringify(DEFAULT_GAMES));
+        let orders = JSON.parse(localStorage.getItem('store_orders') || '[]');
+        let recentSearches = JSON.parse(localStorage.getItem('recent_searches') || '[]');
+
+        let selectedGame = null;
+        let selectedPackage = null;
+        let activePaymentMethod = 'vodafone';
+        let currentCategory = 'all';
+
+        const paymentDetailsMap = {
+            vodafone: {
+                title: 'تحويل عبر فودافون كاش (Vodafone Cash):',
+                number: '01091950849',
+                desc: 'قم بالتحويل بطلب الكود *9*7*الرقم*المبلغ# أو عبر تطبيق أنا فودافون.'
+            }
+        };
+
+        function init() {
+            renderGames();
+            renderAdminOrders();
+            updateStats();
+            renderRecentSearches();
+            checkHashRoute();
+            window.addEventListener('hashchange', checkHashRoute);
+        }
+
+        // Routing Handler
+        function checkHashRoute() {
+            const hash = window.location.hash;
+            if (hash === '#admin') {
+                switchView('admin');
+            } else if (hash === '#track') {
+                switchView('track');
+            } else {
+                switchView('store');
+            }
+        }
+
+        function renderGames() {
+            const grid = document.getElementById('game-grid');
+            const searchVal = (document.getElementById('game-search')?.value || '').toLowerCase();
+
+            const filteredGames = games.filter(g => {
+                const matchCategory = (currentCategory === 'all') || (g.category === currentCategory);
+                const matchSearch = g.name.toLowerCase().includes(searchVal);
+                return matchCategory && matchSearch;
+            });
+
+            document.getElementById('catalog-count').innerText = `${filteredGames.length} عناصر متوفرة`;
+
+            if (filteredGames.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 glass-card rounded-2xl">
+                        <i class="fa-solid fa-ghost text-4xl text-slate-600 mb-2"></i>
+                        <p class="text-sm font-bold text-slate-400">لم نجد أي لعبة أو تطبيق يطابق بحثك</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filteredGames.map(game => `
+                <div class="glass-card rounded-2xl overflow-hidden border border-slate-800/80 hover:border-blue-500/50 transition duration-300 flex flex-col justify-between group">
+                    <div>
+                        <div class="bg-gradient-to-r ${game.color} p-5 text-center relative">
+                            ${game.badge ? `<span class="absolute top-3 left-3 bg-black/40 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/20">${game.badge}</span>` : ''}
+                            <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-md mx-auto flex items-center justify-center text-white text-2xl mb-2 group-hover:scale-110 transition duration-300">
+                                <i class="fa-solid ${game.icon}"></i>
+                            </div>
+                            <h3 class="font-bold text-base text-white">${game.name}</h3>
+                        </div>
+
+                        <div class="p-4 space-y-3">
+                            <div class="flex justify-between items-center text-xs text-slate-400">
+                                <span>الباقات المتاحة:</span>
+                                <span class="text-emerald-400 font-bold">${game.packages.length} باقات</span>
+                            </div>
+
+                            <div class="space-y-1.5 max-h-32 overflow-y-auto pr-1">
+                                ${game.packages.map(p => `
+                                    <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-xl border border-slate-800/60 text-xs">
+                                        <span class="text-slate-200 font-semibold">${p.qty}</span>
+                                        <span class="font-bold text-emerald-400">${p.price}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 pt-0">
+                        <button onclick="openOrderModal('${game.id}')" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-1.5 shadow-md shadow-blue-600/20">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span>شحن الآن</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterGames() {
+            renderGames();
+        }
+
+        function setCategoryFilter(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-filter').forEach(btn => {
+                btn.className = 'cat-filter px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white font-bold whitespace-nowrap text-xs';
+            });
+            event.target.className = 'cat-filter active-cat px-3 py-1.5 rounded-lg bg-blue-600 text-white font-bold whitespace-nowrap text-xs';
+            renderGames();
+        }
+
+        function openOrderModal(gameId) {
+            selectedGame = games.find(g => g.id === gameId);
+            if (!selectedGame) return;
+            selectedPackage = selectedGame.packages[0];
+
+            document.getElementById('modal-header').innerHTML = `
+                <div class="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center mx-auto text-lg mb-1">
+                    <i class="fa-solid ${selectedGame.icon}"></i>
+                </div>
+                <h3 class="text-base font-bold text-white">${selectedGame.name}</h3>
+                <p class="text-xs text-slate-400">اختر الباقة وأدخل الـ Player ID لإتمام العملية فوراً</p>
+            `;
+
+            const pkgContainer = document.getElementById('package-options');
+            pkgContainer.innerHTML = selectedGame.packages.map((pkg, idx) => `
+                <button type="button" onclick="selectPackage(${idx})" id="pkg-btn-${idx}" class="p-2.5 rounded-xl border text-xs text-right transition flex flex-col justify-between ${idx === 0 ? 'border-blue-500 bg-blue-500/15' : 'border-slate-800 bg-slate-900'}">
+                    <div class="font-bold text-white">${pkg.qty}</div>
+                    <div class="text-emerald-400 font-black mt-1">${pkg.price}</div>
+                </button>
+            `).join('');
+
+            selectPaymentMethod('vodafone');
+            document.getElementById('order-modal').classList.remove('hidden');
+        }
+
+        function selectPackage(index) {
+            selectedPackage = selectedGame.packages[index];
+            selectedGame.packages.forEach((_, idx) => {
+                const btn = document.getElementById(`pkg-btn-${idx}`);
+                if (btn) {
+                    btn.className = (idx === index)
+                        ? 'p-2.5 rounded-xl border text-xs text-right transition flex flex-col justify-between border-blue-500 bg-blue-500/15'
+                        : 'p-2.5 rounded-xl border text-xs text-right transition flex flex-col justify-between border-slate-800 bg-slate-900';
+                }
+            });
+        }
+
+        function selectPaymentMethod(method = 'vodafone') {
+            activePaymentMethod = 'vodafone';
+            const details = paymentDetailsMap.vodafone;
+
+            const titleEl = document.getElementById('pay-method-title');
+            const numEl = document.getElementById('wallet-number-display');
+            const descEl = document.getElementById('pay-method-desc');
+
+            if (titleEl) titleEl.innerText = details.title;
+            if (numEl) numEl.innerText = details.number;
+            if (descEl) descEl.innerText = details.desc;
+        }
+
+        function copyWalletNumber() {
+            const num = paymentDetailsMap.vodafone.number;
+            
+            if (num.includes('انتظار')) {
+                showToast('info', 'يرجى إضافة رقم فودافون كاش أولاً');
+                return;
+            }
+
+            const tempInput = document.createElement("input");
+            tempInput.value = num;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToast('success', `تم نسخ الرقم (${num}) بنجاح`);
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const playerId = document.getElementById('player-id').value.trim();
+            const fileInput = document.getElementById('payment-proof');
+
+            if (!playerId) {
+                showToast('error', 'يرجى إدخال Player ID صحيح');
+                return;
+            }
+
+            if (!fileInput.files || !fileInput.files[0]) {
+                showToast('error', 'يرجى رفع صورة إشعار أو تحويل المبلغ');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+                const newOrder = {
+                    id: orderId,
+                    game: selectedGame.name,
+                    package: selectedPackage.qty,
+                    price: selectedPackage.price,
+                    playerId: playerId,
+                    paymentMethod: activePaymentMethod.toUpperCase(),
+                    proof: event.target.result,
+                    status: 'جديد',
+                    date: new Date().toLocaleString('ar-EG')
+                };
+
+                orders.unshift(newOrder);
+                localStorage.setItem('store_orders', JSON.stringify(orders));
+
+                closeModal('order-modal');
+                document.getElementById('topup-form').reset();
+
+                showToast('success', `تم إرسال طلبك بنجاح! رقم الطلب: ${orderId}`);
+                
+                // Add to recent search
+                addRecentSearch(orderId);
+
+                // Switch to tracking view
+                document.getElementById('track-id-input').value = orderId;
+                switchView('track');
+                trackOrder();
+                renderAdminOrders();
+                updateStats();
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+
+        function trackOrder() {
+            const input = document.getElementById('track-id-input').value.trim();
+            const resultDiv = document.getElementById('track-result');
+            
+            if (!input) {
+                showToast('error', 'يرجى إدخال رقم الطلب للبحث');
+                return;
+            }
+
+            const order = orders.find(o => o.id.toLowerCase() === input.toLowerCase());
+            resultDiv.classList.remove('hidden');
+
+            if (order) {
+                addRecentSearch(order.id);
+
+                const statusSteps = [
+                    { title: 'تقديم الطلب', desc: 'تم استلام بيانات التحويل', key: 'جديد' },
+                    { title: 'قيد المراجعة', desc: 'التحقق من إشعار الدفع', key: 'قيد المراجعة' },
+                    { title: 'جاري الشحن', desc: 'إرسال الجواهر/الشدات للحساب', key: 'جاري الشحن' },
+                    { title: 'مكتمل (تم)', desc: 'تم الشحن بنجاح', key: 'تم' }
+                ];
+
+                const currentIdx = getStatusStepIndex(order.status);
+                const isRejected = order.status === 'مرفوض';
+
+                resultDiv.innerHTML = `
+                    <div class="flex flex-wrap justify-between items-center gap-2 pb-4 border-b border-slate-800">
+                        <div>
+                            <span class="text-[10px] text-slate-400 block">رقم العملية</span>
+                            <span class="font-mono text-base font-bold text-blue-400">${order.id}</span>
+                        </div>
+                        <div>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold ${getStatusBadgeClass(order.status)}">
+                                ${order.status}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 text-xs bg-slate-900/80 p-3 rounded-2xl border border-slate-800">
+                        <div><span class="text-slate-400">العنصر:</span> <span class="font-bold text-white">${order.game}</span></div>
+                        <div><span class="text-slate-400">الباقة:</span> <span class="font-bold text-amber-400">${order.package}</span></div>
+                        <div><span class="text-slate-400">Player ID:</span> <span class="font-mono font-bold text-blue-300">${order.playerId}</span></div>
+                        <div><span class="text-slate-400">المبلغ:</span> <span class="font-bold text-emerald-400">${order.price}</span></div>
+                        <div><span class="text-slate-400">التاريخ:</span> <span class="text-slate-300">${order.date}</span></div>
+                        <div><span class="text-slate-400">الدفع:</span> <span class="text-slate-300 font-bold">${order.paymentMethod}</span></div>
+                    </div>
+
+                    ${isRejected ? `
+                        <div class="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-2xl text-xs flex items-center gap-3">
+                            <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                            <div>
+                                <p class="font-bold">تعذر إكمال طلبك (مرفوض)</p>
+                                <p class="text-[11px] opacity-80">يرجى التواصل مع الدعم الفني للتأكد من صحة إشعار الدفع أو الـ Player ID.</p>
+                            </div>
+                        </div>
+                    ` : `
+                        <!-- Progress Steps Timeline -->
+                        <div class="space-y-3 pt-2">
+                            <h4 class="text-xs font-bold text-slate-300">مراحل التنفيذ:</h4>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                ${statusSteps.map((step, idx) => {
+                                    const active = idx <= currentIdx;
+                                    return `
+                                        <div class="p-2.5 rounded-xl border text-center transition ${active ? 'border-blue-500/50 bg-blue-500/10 text-white' : 'border-slate-800 bg-slate-900/40 text-slate-500'}">
+                                            <div class="w-6 h-6 rounded-full mx-auto mb-1 text-[11px] font-bold flex items-center justify-center ${active ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-500'}">
+                                                ${active ? '<i class="fa-solid fa-check"></i>' : idx + 1}
+                                            </div>
+                                            <div class="font-bold text-[11px]">${step.title}</div>
+                                            <div class="text-[9px] opacity-70 mt-0.5">${step.desc}</div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `}
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-2xl text-xs text-center space-y-1">
+                        <i class="fa-solid fa-circle-xmark text-2xl mb-1"></i>
+                        <p class="font-bold">لم يتم العثور على طلب بهذا الرقم</p>
+                        <p class="text-[11px] opacity-70">تأكد من كتابة الرقم بصورة صحيحة متضمناً الأحرف الأولى ORD-</p>
+                    </div>
+                `;
+            }
+        }
+
+        function getStatusStepIndex(status) {
+            switch(status) {
+                case 'جديد': return 0;
+                case 'قيد المراجعة': return 1;
+                case 'جاري الشحن': return 2;
+                case 'تم': return 3;
+                default: return 0;
+            }
+        }
+
+        function addRecentSearch(id) {
+            if (!recentSearches.includes(id)) {
+                recentSearches.unshift(id);
+                if (recentSearches.length > 4) recentSearches.pop();
+                localStorage.setItem('recent_searches', JSON.stringify(recentSearches));
+                renderRecentSearches();
+            }
+        }
+
+        function renderRecentSearches() {
+            const list = document.getElementById('chips-list');
+            if (!list) return;
+            if (recentSearches.length === 0) {
+                list.innerHTML = `<span class="text-slate-500 text-[11px]">لا توجد عمليات بحث سابقة</span>`;
+                return;
+            }
+            list.innerHTML = recentSearches.map(id => `
+                <button onclick="quickTrack('${id}')" class="bg-slate-800 hover:bg-slate-700 text-blue-300 px-2 py-0.5 rounded text-[11px] font-mono transition">
+                    ${id}
+                </button>
+            `).join('');
+        }
+
+        function quickTrack(id) {
+            document.getElementById('track-id-input').value = id;
+            trackOrder();
+        }
+
+        function renderAdminOrders() {
+            const list = document.getElementById('admin-orders-list');
+            if (!list) return;
+
+            const searchVal = (document.getElementById('admin-search')?.value || '').toLowerCase();
+            const filterStatus = document.getElementById('admin-filter-status')?.value || 'all';
+
+            const filteredOrders = orders.filter(o => {
+                const matchSearch = o.id.toLowerCase().includes(searchVal) || o.playerId.toLowerCase().includes(searchVal);
+                const matchStatus = (filterStatus === 'all') || (o.status === filterStatus);
+                return matchSearch && matchStatus;
+            });
+
+            if (filteredOrders.length === 0) {
+                list.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-500">لا توجد طلبات تطابق عناصر البحث</td></tr>`;
+                return;
+            }
+
+            list.innerHTML = filteredOrders.map((order) => {
+                const globalIndex = orders.findIndex(o => o.id === order.id);
+                return `
+                    <tr class="hover:bg-slate-800/40 transition">
+                        <td class="p-3 font-mono font-bold text-blue-400">${order.id}</td>
+                        <td class="p-3">
+                            <span class="font-bold text-white block">${order.game}</span>
+                            <span class="text-[10px] text-amber-400">${order.package}</span>
+                        </td>
+                        <td class="p-3 font-mono text-slate-200">${order.playerId}</td>
+                        <td class="p-3 text-emerald-400 font-bold">${order.price}</td>
+                        <td class="p-3 text-slate-300 font-semibold">${order.paymentMethod || 'فودافون'}</td>
+                        <td class="p-3">
+                            <button onclick="openLightbox('${order.proof}')" class="bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 px-2.5 py-1 rounded-lg text-[10px] font-bold border border-blue-500/30 transition">
+                                <i class="fa-solid fa-image ml-1"></i> عرض الإشعار
+                            </button>
+                        </td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${getStatusBadgeClass(order.status)}">
+                                ${order.status}
+                            </span>
+                        </td>
+                        <td class="p-3 text-center">
+                            <div class="flex items-center justify-center gap-1">
+                                <select onchange="updateOrderStatus(${globalIndex}, this.value)" class="bg-slate-900 border border-slate-700 rounded-lg text-[11px] p-1 text-white focus:outline-none">
+                                    <option ${order.status === 'جديد' ? 'selected' : ''}>جديد</option>
+                                    <option ${order.status === 'قيد المراجعة' ? 'selected' : ''}>قيد المراجعة</option>
+                                    <option ${order.status === 'جاري الشحن' ? 'selected' : ''}>جاري الشحن</option>
+                                    <option ${order.status === 'تم' ? 'selected' : ''}>تم</option>
+                                    <option ${order.status === 'مرفوض' ? 'selected' : ''}>مرفوض</option>
+                                </select>
+                                <button onclick="deleteOrder(${globalIndex})" class="text-red-400 hover:text-red-300 p-1 rounded transition" title="حذف الطلب">
+                                    <i class="fa-solid fa-trash text-xs"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function getStatusBadgeClass(status) {
+            switch(status) {
+                case 'جديد': return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
+                case 'قيد المراجعة': return 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
+                case 'جاري الشحن': return 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30';
+                case 'تم': return 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+                case 'مرفوض': return 'bg-red-500/20 text-red-400 border border-red-500/30';
+                default: return 'bg-slate-700 text-slate-300';
+            }
+        }
+
+        function updateOrderStatus(index, newStatus) {
+            orders[index].status = newStatus;
+            localStorage.setItem('store_orders', JSON.stringify(orders));
+            renderAdminOrders();
+            updateStats();
+            showToast('info', `تم تحديث حالة الطلب إلى (${newStatus})`);
+        }
+
+        function deleteOrder(index) {
+            if (index >= 0 && index < orders.length) {
+                orders.splice(index, 1);
+                localStorage.setItem('store_orders', JSON.stringify(orders));
+                renderAdminOrders();
+                updateStats();
+                showToast('info', 'تم حذف الطلب بنجاح');
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('stat-total-orders').innerText = orders.length;
+            document.getElementById('stat-pending-orders').innerText = orders.filter(o => o.status === 'جديد' || o.status === 'قيد المراجعة').length;
+            document.getElementById('stat-completed-orders').innerText = orders.filter(o => o.status === 'تم').length;
+
+            const revenue = orders.filter(o => o.status === 'تم').reduce((acc, curr) => {
+                const num = parseInt(curr.price.replace(/[^\d]/g, '')) || 0;
+                return acc + num;
+            }, 0);
+
+            document.getElementById('stat-total-revenue').innerText = `${revenue.toLocaleString('ar-EG')} ج.م`;
+        }
+
+        function openAddGameModal() {
+            document.getElementById('add-game-modal').classList.remove('hidden');
+        }
+
+        function handleAddGameSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('new-game-name').value.trim();
+            const category = document.getElementById('new-game-cat').value;
+            const icon = document.getElementById('new-game-icon').value.trim() || 'fa-gamepad';
+            const packagesText = document.getElementById('new-game-packages').value.trim();
+
+            const parsedPackages = packagesText.split('\n').map(line => {
+                const parts = line.split(':');
+                return {
+                    qty: parts[0]?.trim() || 'باقة غير محددة',
+                    price: parts[1]?.trim() || '0 ج.م'
+                };
+            });
+
+            const newGame = {
+                id: 'game_' + Date.now(),
+                name,
+                category,
+                icon,
+                badge: 'جديد',
+                color: 'from-blue-600 to-indigo-800',
+                packages: parsedPackages
+            };
+
+            games.push(newGame);
+            localStorage.setItem('store_games', JSON.stringify(games));
+
+            closeModal('add-game-modal');
+            document.getElementById('add-game-form').reset();
+
+            renderGames();
+            showToast('success', `تم إضافة (${name}) للمتجر بنجاح`);
+        }
+
+        function resetStoreData() {
+            localStorage.removeItem('store_games');
+            games = JSON.parse(JSON.stringify(DEFAULT_GAMES));
+            renderGames();
+            showToast('info', 'تم إعادة ضبط الألعاب الافتراضية');
+        }
+
+        function switchView(view) {
+            document.getElementById('store-view').classList.add('hidden');
+            document.getElementById('track-view').classList.add('hidden');
+            document.getElementById('admin-view').classList.add('hidden');
+
+            const navBtns = ['nav-store', 'nav-track', 'nav-admin'];
+            navBtns.forEach(b => {
+                const el = document.getElementById(b);
+                if (el) el.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition duration-200 text-slate-400 hover:text-white flex items-center gap-1.5';
+            });
+
+            if (view === 'admin') {
+                document.getElementById('admin-view').classList.remove('hidden');
+                document.getElementById('nav-admin').className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition duration-200 active-tab flex items-center gap-1.5';
+                window.location.hash = 'admin';
+            } else if (view === 'track') {
+                document.getElementById('track-view').classList.remove('hidden');
+                document.getElementById('nav-track').className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition duration-200 active-tab flex items-center gap-1.5';
+                window.location.hash = 'track';
+            } else {
+                document.getElementById('store-view').classList.remove('hidden');
+                document.getElementById('nav-store').className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition duration-200 active-tab flex items-center gap-1.5';
+                window.location.hash = '';
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId)?.classList.add('hidden');
+        }
+
+        function openLightbox(imgSrc) {
+            document.getElementById('lightbox-img').src = imgSrc;
+            document.getElementById('proof-lightbox').classList.remove('hidden');
+        }
+
+        function showToast(type, message) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `p-3.5 rounded-2xl text-xs font-bold shadow-xl border backdrop-blur-lg flex items-center justify-between gap-3 transform translate-y-4 opacity-0 transition-all duration-300 pointer-events-auto ${
+                type === 'success' ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-200' :
+                type === 'error' ? 'bg-red-950/90 border-red-500/40 text-red-200' :
+                'bg-slate-900/90 border-blue-500/40 text-blue-200'
+            }`;
+
+            const icon = type === 'success' ? 'fa-circle-check text-emerald-400' :
+                         type === 'error' ? 'fa-circle-exclamation text-red-400' :
+                         'fa-circle-info text-blue-400';
+
+            toast.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid ${icon} text-base"></i>
+                    <span>${message}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="opacity-60 hover:opacity-100"><i class="fa-solid fa-xmark"></i></button>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
