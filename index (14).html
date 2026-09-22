@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لاشين وجوز | متجر شحن الألعاب</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{font-family:Cairo,sans-serif;background:#070b14;color:#fff}
+.bg-grid{background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:32px 32px}
+.glass{background:rgba(15,23,42,.78);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08)}
+.card{transition:.25s}.card:hover{transform:translateY(-5px);border-color:rgba(16,185,129,.45);box-shadow:0 18px 50px rgba(0,0,0,.25)}
+.hero{background:radial-gradient(circle at 15% 20%,rgba(16,185,129,.18),transparent 35%),radial-gradient(circle at 85% 30%,rgba(6,182,212,.13),transparent 30%),#0b1220}
+.hide{display:none!important}.scrollbar::-webkit-scrollbar{width:7px}.scrollbar::-webkit-scrollbar-thumb{background:#334155;border-radius:10px}
+</style>
+
+<style id="large-admin-menu">
+.admin-large-menu button{
+  min-height:58px!important;
+  font-size:16px!important;
+  border-radius:16px!important;
+}
+.admin-large-exit{
+  min-height:64px!important;
+  font-size:18px!important;
+  font-weight:900!important;
+  width:100%!important;
+  margin-top:14px!important;
+}
+</style>
+
+<style id="admin-fullscreen-style">
+#modal.admin-mode{
+  align-items:stretch!important;
+  justify-content:stretch!important;
+  padding:0!important;
+  background:rgba(2,6,23,.96)!important;
+}
+#modal.admin-mode > .admin-shell{
+  width:100%!important;
+  max-width:none!important;
+  height:100vh!important;
+  max-height:none!important;
+  border-radius:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  background:#07101d!important;
+}
+.admin-shell{display:flex;flex-direction:column}
+.admin-topbar{
+  min-height:78px;
+  padding:14px 20px;
+  border-bottom:1px solid rgba(255,255,255,.09);
+  background:rgba(7,11,20,.96);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-shrink:0;
+}
+.admin-layout{display:flex;flex:1;min-height:0}
+.admin-sidebar{
+  width:290px;
+  padding:16px;
+  border-left:1px solid rgba(255,255,255,.08);
+  background:#0a1220;
+  overflow-y:auto;
+  flex-shrink:0;
+}
+.admin-main{
+  flex:1;
+  min-width:0;
+  overflow-y:auto;
+  padding:22px;
+}
+.admin-nav-btn{
+  width:100%!important;
+  min-height:62px!important;
+  margin-bottom:10px!important;
+  border-radius:16px!important;
+  padding:14px 16px!important;
+  text-align:right!important;
+  font-size:15px!important;
+  font-weight:900!important;
+  background:rgba(15,23,42,.9);
+  border:1px solid rgba(255,255,255,.06);
+}
+.admin-nav-btn:hover{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.08)}
+.admin-exit-btn{
+  width:100%!important;
+  min-height:62px!important;
+  border-radius:16px!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  margin-top:10px!important;
+}
+.admin-settings-card{border:1px solid rgba(16,185,129,.18);background:rgba(15,23,42,.78);border-radius:18px;padding:18px}
+@media(max-width:800px){
+  .admin-layout{flex-direction:column}
+  .admin-sidebar{width:100%;border-left:0;border-bottom:1px solid rgba(255,255,255,.08);max-height:230px;padding:12px}
+  .admin-nav-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .admin-nav-btn{margin-bottom:0!important;min-height:58px!important;font-size:13px!important}
+  .admin-exit-btn{min-height:58px!important}
+  .admin-main{padding:14px}
+}
+</style>
+<style id="currency-notify-style">
+.currency-select{background:#0f172a;border:1px solid #334155;border-radius:12px;padding:10px;color:#fff;font-weight:700;width:100%}
+.notification-dot{position:absolute;top:-5px;left:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#ef4444;color:#fff;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid #070b14}
+.notification-item{border:1px solid rgba(255,255,255,.06);background:rgba(15,23,42,.75);border-radius:16px;padding:14px}
+.notification-item.unread{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.08)}
+</style>
+
+<style>
+#liveNotifyPopup{
+  position:fixed;left:16px;right:16px;bottom:18px;z-index:99999;
+  display:none;max-width:430px;margin:auto;
+  background:rgba(15,23,42,.97);border:1px solid rgba(16,185,129,.35);
+  border-radius:18px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.45);
+  backdrop-filter:blur(12px);direction:rtl;
+}
+#liveNotifyPopup.show{display:block;animation:liveNotifyIn .28s ease-out}
+@keyframes liveNotifyIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+#liveNotifyPopup .live-notify-title{font-weight:900;font-size:15px}
+#liveNotifyPopup .live-notify-text{font-size:13px;color:#cbd5e1;margin-top:4px}
+#liveNotifyPopup .live-notify-actions{display:flex;gap:8px;margin-top:10px}
+#liveNotifyPopup button{flex:1;border:0;border-radius:11px;padding:9px;font-weight:800;cursor:pointer}
+#liveNotifyPopup .open-btn{background:#10b981;color:#020617}
+#liveNotifyPopup .close-btn{background:#1e293b;color:#e2e8f0}
+</style>
+</head>
+<body class="min-h-screen bg-grid">
+<div id="liveNotifyPopup" role="alert" aria-live="polite">
+  <div class="live-notify-title" id="liveNotifyTitle">🔔 إشعار جديد</div>
+  <div class="live-notify-text" id="liveNotifyText"></div>
+  <div class="live-notify-actions">
+    <button class="open-btn" id="liveNotifyOpen">فتح</button>
+    <button class="close-btn" onclick="hideLiveNotify()">إغلاق</button>
+  </div>
+</div>
+
+
+<header class="sticky top-0 z-50 border-b border-white/10 bg-[#070b14]/90 backdrop-blur-xl">
+  <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+    <button onclick="goHome()" class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center">
+        <i class="fa-solid fa-bolt text-emerald-400"></i>
+      </div>
+      <div class="text-right">
+        <div id="siteBrandName" class="font-black text-lg">لاشين وجوز</div>
+        <div class="text-[10px] text-slate-400">متجر الشحن السريع</div>
+      </div>
+    </button>
+    <nav class="hidden md:flex items-center gap-6 text-sm text-slate-300">
+      <button onclick="goHome()" class="hover:text-emerald-400">الرئيسية</button>
+      <a href="#games" class="hover:text-emerald-400">الألعاب والتطبيقات</a>
+      <button onclick="openSupport()" class="hover:text-emerald-400">الدعم</button>
+    </nav>
+    <button onclick="adminLogin()" class="px-3 py-2 rounded-xl bg-slate-800 border border-emerald-500/20 text-emerald-400 text-xs font-black">الإدارة</button><div id="accountArea" class="flex items-center gap-2"></div>
+  </div>
+</header>
+
+<section class="hero border-b border-white/5">
+  <div class="max-w-7xl mx-auto px-4 py-12 md:py-20 grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-bold mb-5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> شحن سريع وآمن
+      </div>
+      <h1 class="text-4xl md:text-6xl font-black leading-tight">اشحن ألعابك<br><span class="text-emerald-400">بسهولة وسرعة</span></h1>
+      <p class="mt-5 text-slate-400 max-w-xl leading-8">متجر لاشين وجوز لشحن الألعاب والتطبيقات. اختر الخدمة، أدخل الـID، اختر الباقة وأرسل طلبك للمراجعة.</p>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <a href="#games" class="px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black">ابدأ الشحن الآن <i class="fa-solid fa-arrow-left mr-2"></i></a>
+        <button onclick="openSupport()" class="px-6 py-3.5 rounded-xl glass font-bold">الدعم الفني</button>
+      </div>
+      <div class="mt-8 flex flex-wrap gap-6 text-xs text-slate-400">
+        <span><i class="fa-solid fa-shield-halved text-emerald-400 ml-1"></i> أمان ومراجعة</span>
+        <span><i class="fa-solid fa-bolt text-emerald-400 ml-1"></i> تنفيذ سريع</span>
+        <span><i class="fa-solid fa-headset text-emerald-400 ml-1"></i> دعم فني</span>
+      </div>
+    </div>
+    <div class="relative">
+      <div class="absolute inset-0 bg-emerald-500/10 blur-3xl rounded-full"></div>
+      <div class="glass rounded-3xl p-4 relative">
+        <img class="w-full h-72 md:h-96 object-cover rounded-2xl" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&auto=format&fit=crop&q=85" alt="Gaming">
+        <div class="absolute bottom-8 right-8 left-8 glass rounded-2xl p-4 flex items-center justify-between">
+          <div><div class="text-xs text-slate-400">خدمات الشحن</div><div class="font-black">ألعاب وتطبيقات متعددة</div></div>
+          <i class="fa-solid fa-gamepad text-3xl text-emerald-400"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="games" class="max-w-7xl mx-auto px-4 py-12">
+  <div class="flex items-end justify-between mb-7">
+    <div><div class="text-emerald-400 text-xs font-bold mb-1">SHOP</div><h2 class="text-2xl md:text-3xl font-black">الألعاب والتطبيقات</h2></div>
+    <div id="currencyArea" class="mt-3"></div><div id="walletMini" class="text-xs text-slate-400"></div>
+  </div>
+  <div id="gameGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 pb-14 grid md:grid-cols-3 gap-4">
+  <div class="glass rounded-2xl p-5"><i class="fa-solid fa-shield-halved text-2xl text-emerald-400"></i><h3 class="font-black mt-3">دفع ومراجعة آمنة</h3><p class="text-xs text-slate-400 mt-2">طلباتك تُسجل وتظهر حالتها داخل حسابك.</p></div>
+  <div class="glass rounded-2xl p-5"><i class="fa-solid fa-clock text-2xl text-cyan-400"></i><h3 class="font-black mt-3">متابعة الطلب</h3><p class="text-xs text-slate-400 mt-2">اعرف حالة الشحن والإيداع والسحب من حسابك.</p></div>
+  <div class="glass rounded-2xl p-5"><i class="fa-solid fa-headset text-2xl text-amber-400"></i><h3 class="font-black mt-3">دعم فني</h3><p class="text-xs text-slate-400 mt-2">تواصل مع الإدارة عند وجود مشكلة في الطلب.</p></div>
+</section>
+
+<footer class="border-t border-white/10 py-8 text-center text-xs text-slate-500">© 2026 <span id="siteFooterName">لاشين وجوز</span> — متجر شحن الألعاب</footer>
+
+<!-- Modal -->
+<div id="modal" class="hide fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm p-4 flex items-center justify-center">
+ <div class="glass bg-[#0b1220] rounded-3xl w-full max-w-lg p-6 max-h-[92vh] overflow-y-auto scrollbar relative">
+  <button onclick="closeModal()" class="absolute left-5 top-5 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+  <div id="modalContent"></div>
+ </div>
+</div>
+
+<script>
+const defaultGames=[
+ {id:'pubg',name:'PUBG Mobile',image:'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=900&auto=format&fit=crop&q=85',packages:[['60 UC',50],['325 UC',220],['660 UC',420],['1800 UC',1050]]},
+ {id:'freefire',name:'Free Fire',image:'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=900&auto=format&fit=crop&q=85',packages:[['100 Diamonds',50],['310 Diamonds',140],['520 Diamonds',220],['1060 Diamonds',420]]},
+ {id:'partyu',name:'PartyU',image:'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?w=900&auto=format&fit=crop&q=85',packages:[['11,000 كنزة',50],['22,000 كنزة',100],['44,000 كنزة',200]]},
+ {id:'imo',name:'imo',image:'https://images.unsplash.com/photo-1611605698335-8b1569810432?w=900&auto=format&fit=crop&q=85',packages:[['500 ماسة',75],['1000 ماسة',145],['2500 ماسة',350]]}
+];
+let games=JSON.parse(localStorage.getItem('lj_games')||'null')||defaultGames;
+let user=JSON.parse(localStorage.getItem('lj_user')||'null');
+let orders=JSON.parse(localStorage.getItem('lj_orders')||'[]');
+const ADMIN_USER='okmmo';
+const ADMIN_PASS='987987987';
+let adminSession=localStorage.getItem('lj_admin')==='1';
+let adminRole=localStorage.getItem('lj_admin_role')||'admin';
+let staffDB=JSON.parse(localStorage.getItem('lj_staff')||'[]').map(x=>({
+  ...x,
+  role:x.role||'admin',
+  active:x.active!==false,
+  permissions:x.permissions||{
+    orders:true, support:true, users:true, games:true, shift:true
+  }
+}));
+let usersDB=JSON.parse(localStorage.getItem('lj_users')||'[]');
+let shift=JSON.parse(localStorage.getItem('lj_shift')||'null')||{online:true,phone:'01012345678',auto:false};
+let siteName=localStorage.getItem('lj_site_name')||'لاشين وجوز';
+function saveSiteName(){localStorage.setItem('lj_site_name',siteName)}
+function applySiteBrand(){
+  document.title=siteName+' | متجر شحن الألعاب';
+  const brand=document.getElementById('siteBrandName');
+  const footer=document.getElementById('siteFooterName');
+  if(brand) brand.textContent=siteName;
+  if(footer) footer.textContent=siteName;
+}
+
+function saveShift(){localStorage.setItem('lj_shift',JSON.stringify(shift))}
+
+function save(){localStorage.setItem('lj_games',JSON.stringify(games));localStorage.setItem('lj_orders',JSON.stringify(orders));if(user)localStorage.setItem('lj_user',JSON.stringify(user))}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+const currencyOptions=[
+ {country:'مصر',code:'EGP',name:'الجنيه المصري',rate:1},
+ {country:'السعودية',code:'SAR',name:'الريال السعودي',rate:12.93},
+ {country:'الإمارات',code:'AED',name:'الدرهم الإماراتي',rate:13.21},
+ {country:'قطر',code:'QAR',name:'الريال القطري',rate:13.33},
+ {country:'الكويت',code:'KWD',name:'الدينار الكويتي',rate:158.00},
+ {country:'البحرين',code:'BHD',name:'الدينار البحريني',rate:128.80},
+ {country:'عُمان',code:'OMR',name:'الريال العُماني',rate:126.00},
+ {country:'الأردن',code:'JOD',name:'الدينار الأردني',rate:68.40},
+ {country:'المغرب',code:'MAD',name:'الدرهم المغربي',rate:5.20},
+ {country:'الجزائر',code:'DZD',name:'الدينار الجزائري',rate:0.36},
+ {country:'تونس',code:'TND',name:'الدينار التونسي',rate:16.00},
+ {country:'ليبيا',code:'LYD',name:'الدينار الليبي',rate:14.90},
+ {country:'العراق',code:'IQD',name:'الدينار العراقي',rate:0.037},
+ {country:'اليمن',code:'YER',name:'الريال اليمني',rate:0.194},
+ {country:'فلسطين',code:'ILS',name:'الشيكل الإسرائيلي',rate:13.30},
+ {country:'لبنان',code:'LBP',name:'الليرة اللبنانية',rate:0.00054},
+ {country:'سوريا',code:'SYP',name:'الليرة السورية',rate:0.0037},
+ {country:'السودان',code:'SDG',name:'الجنيه السوداني',rate:0.081},
+ {country:'موريتانيا',code:'MRU',name:'الأوقية الموريتانية',rate:0.0122},
+ {country:'الصومال',code:'SOS',name:'الشلن الصومالي',rate:0.084},
+ {country:'جيبوتي',code:'DJF',name:'الفرنك الجيبوتي',rate:0.273},
+ {country:'جزر القمر',code:'KMF',name:'الفرنك القمري',rate:0.11},
+ {country:'الولايات المتحدة',code:'USD',name:'الدولار الأمريكي',rate:48.50},
+ {country:'أستراليا',code:'AUD',name:'الدولار الأسترالي',rate:33.00,group:'OECD'},
+ {country:'النمسا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'بلجيكا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'كندا',code:'CAD',name:'الدولار الكندي',rate:35.10,group:'OECD'},
+ {country:'تشيلي',code:'CLP',name:'البيزو التشيلي',rate:0.054,group:'OECD'},
+ {country:'كولومبيا',code:'COP',name:'البيزو الكولومبي',rate:0.012,group:'OECD'},
+ {country:'كوستاريكا',code:'CRC',name:'الكولون الكوستاريكي',rate:0.096,group:'OECD'},
+ {country:'التشيك',code:'CZK',name:'الكورونا التشيكية',rate:2.22,group:'OECD'},
+ {country:'الدنمارك',code:'DKK',name:'الكرونة الدنماركية',rate:7.60,group:'OECD'},
+ {country:'إستونيا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'فنلندا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'فرنسا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'ألمانيا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'اليونان',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'المجر',code:'HUF',name:'الفورنت المجري',rate:0.142,group:'OECD'},
+ {country:'أيسلندا',code:'ISK',name:'الكرونا الأيسلندية',rate:0.43,group:'OECD'},
+ {country:'أيرلندا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'إسرائيل',code:'ILS',name:'الشيكل الإسرائيلي',rate:16.00,group:'OECD'},
+ {country:'إيطاليا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'اليابان',code:'JPY',name:'الين الياباني',rate:0.31,group:'OECD'},
+ {country:'كوريا الجنوبية',code:'KRW',name:'الوون الكوري الجنوبي',rate:0.036,group:'OECD'},
+ {country:'لاتفيا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'ليتوانيا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'لوكسمبورغ',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'المكسيك',code:'MXN',name:'البيزو المكسيكي',rate:2.72,group:'OECD'},
+ {country:'هولندا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'نيوزيلندا',code:'NZD',name:'الدولار النيوزيلندي',rate:29.80,group:'OECD'},
+ {country:'النرويج',code:'NOK',name:'الكرونة النرويجية',rate:5.20,group:'OECD'},
+ {country:'بولندا',code:'PLN',name:'الزلوتي البولندي',rate:13.20,group:'OECD'},
+ {country:'البرتغال',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'سلوفاكيا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'سلوفينيا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'إسبانيا',code:'EUR',name:'اليورو',rate:56.80,group:'OECD'},
+ {country:'السويد',code:'SEK',name:'الكرونة السويدية',rate:5.10,group:'OECD'},
+ {country:'سويسرا',code:'CHF',name:'الفرنك السويسري',rate:60.50,group:'OECD'},
+ {country:'تركيا',code:'TRY',name:'الليرة التركية',rate:1.20,group:'OECD'},
+ {country:'المملكة المتحدة',code:'GBP',name:'الجنيه الإسترليني',rate:66.00,group:'OECD'}
+];
+let selectedCurrency=JSON.parse(localStorage.getItem('lj_currency')||'null')||currencyOptions[0];
+const savedCurrencyRates=JSON.parse(localStorage.getItem('lj_currency_rates')||'{}'); currencyOptions.forEach(c=>{if(savedCurrencyRates[c.code])c.rate=savedCurrencyRates[c.code]});
+function currencySymbol(code){return code==='USD'?'$':code}
+function setCurrency(code){
+ const c=currencyOptions.find(x=>x.code===code)||currencyOptions[0];
+ selectedCurrency=c;
+ localStorage.setItem('lj_currency',JSON.stringify(c));
+ render();
+}
+function moneyEGP(amount){const v=Number(amount)*selectedCurrency.rate;const digits=v<1?4:(v<100?2:0);return `${v.toLocaleString('ar-EG',{maximumFractionDigits:digits})} ${currencySymbol(selectedCurrency.code)}`}
+function currencyPicker(){return `<div class="bg-slate-900 rounded-2xl p-3 mb-4"><div class="text-xs text-slate-400 mb-2">الدولة والعملة</div><select class="currency-select" onchange="setCurrency(this.value)">${currencyOptions.map(c=>`<option value="${c.code}" ${c.code===selectedCurrency.code?'selected':''}>${c.country} — ${c.name} (${c.code})</option>`).join('')}</select><div class="text-[10px] text-slate-500 mt-2">الأسعار المعروضة محوّلة من السعر الأساسي بالجنيه المصري.</div></div>`}
+function getUserNotifications(){if(!user)return [];const all=JSON.parse(localStorage.getItem('lj_notifications')||'[]');return all.filter(n=>n.userId===user.id).sort((a,b)=>b.id-a.id)}
+function saveNotifications(list){localStorage.setItem('lj_notifications',JSON.stringify(list))}
+function getUnreadNotificationsCount(){return getUserNotifications().filter(n=>!n.read).length}
+function addNotification(userId,title,text,type='success',orderId=null){if(!userId)return;const all=JSON.parse(localStorage.getItem('lj_notifications')||'[]');all.push({id:Date.now()+Math.floor(Math.random()*1000),userId,title,text,type,orderId,read:false,date:new Date().toLocaleString('ar-EG')});saveNotifications(all);if(user&&user.id===userId)render()}
+function openNotifications(){if(!user){auth();return}const list=getUserNotifications();const all=JSON.parse(localStorage.getItem('lj_notifications')||'[]');all.forEach(n=>{if(n.userId===user.id)n.read=true});saveNotifications(all);show(`<div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-black">الإشعارات</h2><p class="text-xs text-slate-400 mt-1">تحديثات طلبات الشحن.</p></div><button onclick="account()" class="text-xs text-emerald-400">حسابي</button></div><div class="space-y-3">${list.length?list.map(n=>`<div class="notification-item ${n.read?'':'unread'}"><div class="flex gap-3 items-start"><div class="w-10 h-10 rounded-xl flex items-center justify-center ${n.type==='success'?'bg-emerald-500/15 text-emerald-400':'bg-red-500/15 text-red-400'}"><i class="fa-solid ${n.type==='success'?'fa-circle-check':'fa-circle-xmark'}"></i></div><div class="flex-1"><div class="font-black">${esc(n.title)}</div><div class="text-sm text-slate-300 mt-1 leading-6">${esc(n.text)}</div><div class="text-[10px] text-slate-500 mt-2">${esc(n.date)}</div></div></div></div>`).join(''):'<div class="text-center text-slate-500 py-10">لا توجد إشعارات حالياً.</div>'}</div><button onclick="account()" class="w-full mt-4 py-3 rounded-xl bg-slate-800 font-bold">رجوع</button>`)}
+
+let lastNotificationSoundId=0;
+let lastSupportSoundId=0;
+let liveNotifyTimer=null;
+
+function showLiveNotify(title,text,openAction){
+ const p=document.getElementById('liveNotifyPopup'),t=document.getElementById('liveNotifyTitle'),x=document.getElementById('liveNotifyText'),b=document.getElementById('liveNotifyOpen');
+ if(!p||!t||!x||!b)return;
+ t.textContent=title;x.textContent=text||'';
+ b.onclick=()=>{hideLiveNotify();if(typeof openAction==='function')openAction()};
+ p.classList.remove('show');void p.offsetWidth;p.classList.add('show');
+ clearTimeout(liveNotifyTimer);liveNotifyTimer=setTimeout(hideLiveNotify,8000);
+}
+function hideLiveNotify(){const p=document.getElementById('liveNotifyPopup');if(p)p.classList.remove('show')}
+
+function playSiteTone(kind){
+ try{
+  const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
+  const c=window.__siteAudio||(window.__siteAudio=new C());
+  if(c.state==='suspended')c.resume();
+  const o=c.createOscillator(),g=c.createGain(),now=c.currentTime;
+  o.type='sine';o.frequency.value=kind==='error'?520:kind==='success'?880:740;
+  g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.12,now+.02);g.gain.exponentialRampToValueAtTime(.0001,now+.28);
+  o.connect(g);g.connect(c.destination);o.start(now);o.stop(now+.3);
+ }catch(e){}
+}
+function playSiteNotificationSound(kind){playSiteTone(kind||'info')}
+function initializeSoundMarkers(){
+ const ns=JSON.parse(localStorage.getItem('lj_notifications')||'[]');
+ const ss=JSON.parse(localStorage.getItem('lj_support_messages')||'[]');
+ lastNotificationSoundId=ns.filter(n=>user&&n.userId===user.id).reduce((a,n)=>Math.max(a,Number(n.id)||0),0);
+ lastSupportSoundId=ss.filter(m=>user&&m.userId===user.id&&m.sender==='admin').reduce((a,m)=>Math.max(a,Number(m.id)||0),0);
+}
+function checkLiveUserNotifications(){
+ if(!user)return;
+ const ns=JSON.parse(localStorage.getItem('lj_notifications')||'[]');
+ const mine=ns.filter(n=>n.userId===user.id);
+ const n=mine.length?mine[mine.length-1]:null;
+ if(n&&Number(n.id)>lastNotificationSoundId){
+  lastNotificationSoundId=Number(n.id);
+  playSiteNotificationSound(n.type);
+  showLiveNotify('🔔 إشعار جديد',n.title||n.text||'لديك إشعار جديد',()=>openNotifications());
+ }
+ const ss=JSON.parse(localStorage.getItem('lj_support_messages')||'[]');
+ const sm=ss.filter(m=>m.userId===user.id&&m.sender==='admin');
+ const s=sm.length?sm[sm.length-1]:null;
+ if(s&&Number(s.id)>lastSupportSoundId){
+  lastSupportSoundId=Number(s.id);
+  playSiteNotificationSound('success');
+  showLiveNotify('💬 رسالة جديدة من الدعم الفني',s.text||'الدعم الفني أرسل لك رسالة جديدة',()=>openSupport());
+ }
+}
+document.addEventListener('pointerdown',()=>{try{if(window.__siteAudio&&window.__siteAudio.state==='suspended')window.__siteAudio.resume()}catch(e){}},{once:false});
+setInterval(checkLiveUserNotifications,1500);
+
+function render(){
+ document.getElementById('currencyArea').innerHTML=currencyPicker();
+ document.getElementById('gameGrid').innerHTML=games.map(g=>`
+ <div class="card glass rounded-2xl overflow-hidden">
+  <div class="relative"><img src="${g.image}" class="w-full h-44 object-cover" onerror="this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?w=900'"><div class="absolute top-3 right-3 px-2 py-1 rounded-lg bg-black/60 text-[10px]">متاح للشحن</div></div>
+  <div class="p-4">
+   <h3 class="font-black text-lg">${esc(g.name)}</h3>
+   <div class="mt-3 space-y-2">${g.packages.slice(0,3).map(p=>`<div class="flex justify-between bg-slate-900/70 rounded-lg p-2 text-xs"><span>${esc(p[0])}</span><b class="text-emerald-400">${moneyEGP(p[1])}</b></div>`).join('')}</div>
+   <button onclick="openGame('${g.id}')" class="w-full mt-4 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm">اشحن الآن</button>
+  </div>
+ </div>`).join('');
+ renderAccount();
+ applySiteBrand();
+}
+function renderAccount(){
+ const a=document.getElementById('accountArea'),w=document.getElementById('walletMini');
+ if(user){
+  const unread=getUnreadNotificationsCount(); a.innerHTML=`<div class="relative"><button onclick="openNotifications()" class="relative w-10 h-10 rounded-xl glass flex items-center justify-center text-amber-300" title="الإشعارات"><i class="fa-solid fa-bell"></i>${unread?`<span class="notification-dot">${unread>99?'99+':unread}</span>`:''}</button></div><button onclick="account()" class="glass px-3 py-2 rounded-xl text-xs font-bold"><i class="fa-solid fa-user text-emerald-400 ml-1"></i>${esc(user.name)}</button>`;
+  w.innerHTML='الدفع مباشر عبر طرق التحويل المتاحة — بدون رصيد داخل الموقع';
+ }else{
+  a.innerHTML=`<button onclick="auth()" class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs">دخول / حساب جديد</button>`;
+  w.innerHTML='سجل الدخول لبدء الشحن';
+ }
+}
+function openGame(id){
+ const g=games.find(x=>x.id===id); if(!g)return;
+ if(!user){auth();return}
+ show(`<div class="text-center mb-5"><div class="w-16 h-16 mx-auto rounded-2xl overflow-hidden mb-3"><img src="${g.image}" class="w-full h-full object-cover"></div><h2 class="text-2xl font-black">${esc(g.name)}</h2><p class="text-xs text-slate-400 mt-1">اختر الباقة وأدخل ID الحساب ثم أرسل إثبات التحويل</p></div>
+ <form onsubmit="placeOrder(event,'${g.id}')">
+ <label class="text-xs font-bold">الباقة</label><div class="grid grid-cols-2 gap-2 mt-2 mb-4">${g.packages.map((p,i)=>`<label class="cursor-pointer border border-slate-700 rounded-xl p-3 has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-500/10"><input ${i===0?'checked':''} type="radio" name="pkg" value="${i}" class="hidden"><div class="font-bold text-sm">${esc(p[0])}</div><div class="text-emerald-400 text-xs font-black mt-1">${moneyEGP(p[1])}</div></label>`).join('')}</div>
+ <label class="text-xs font-bold">ID / Player ID</label><input id="playerId" required class="w-full mt-2 mb-4 bg-slate-900 border border-slate-700 rounded-xl p-3 font-mono" placeholder="اكتب ID الحساب هنا">
+ <label class="text-xs font-bold">طريقة الدفع</label>
+ <div class="grid grid-cols-1 gap-2 mt-2 mb-3">
+  ${paymentMethodOrderForCurrency().filter(k=>getPaymentMethod(k).enabled).map((k,i)=>{const pm=getPaymentMethod(k);return `<label class="cursor-pointer border border-slate-700 rounded-xl p-3 has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-500/10"><input ${i===0?'checked':''} type="radio" name="paymentMethod" value="${k}" class="hidden"><div class="font-black text-sm">${esc(pm.label)}${i===0?` <span class="text-[10px] text-emerald-400">— مناسب لعملة ${esc(selectedCurrency.code)}</span>`:''}</div><div class="text-xs text-slate-400 mt-1 whitespace-pre-line">${esc(pm.details||'لم يتم إضافة بيانات التحويل بعد.')}</div></label>`}).join('')}</div>
+ <div class="bg-slate-900 rounded-xl p-3 text-xs mb-3">
+  <div class="text-slate-400">حساب التحويل حسب العملة</div>
+  <div id="selectedPaymentLabel" class="font-black text-sm text-amber-300 mt-1"></div>
+  <div id="selectedPaymentDetails" class="text-sm font-bold text-emerald-400 mt-1 whitespace-pre-line"></div>
+  <div class="mt-2 ${shift.online?'text-emerald-400':'text-red-400'}">${shift.online?'الشفت أونلاين — جاهز لاستقبال الطلب':'الشفت أوفلاين — سيتم مراجعة الطلب لاحقًا'}</div>
+ </div>
+ <label class="text-xs font-bold">رقم/حساب المُحوِّل</label><input id="fromPhone" required class="w-full mt-2 mb-3 bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="رقم الهاتف أو اسم/حساب المُحوِّل">
+ <label class="text-xs font-bold">رقم/مرجع التحويل</label><input id="transferRef" required class="w-full mt-2 mb-3 bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="رقم العملية أو المرجع">
+ <label class="text-xs font-bold">إثبات التحويل (Screenshot)</label><input id="proof" type="file" accept="image/*" required class="w-full mt-2 mb-4 bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs">
+ <button class="w-full py-3.5 rounded-xl bg-emerald-500 text-slate-950 font-black">إرسال الطلب وإثبات التحويل</button>
+ </form>`);
+}
+
+
+let paymentMethodDelegated=true;
+document.addEventListener('change',e=>{if(e.target&&e.target.name==='paymentMethod')updateSelectedPaymentDetails();});
+
+function updateSelectedPaymentDetails(){
+ const el=document.getElementById('selectedPaymentDetails');
+ const label=document.getElementById('selectedPaymentLabel');
+ const r=document.querySelector('input[name="paymentMethod"]:checked');
+ if(r){
+   const pm=getPaymentMethod(r.value);
+   if(el)el.textContent=pm.details||'لم يتم إضافة بيانات التحويل بعد.';
+   if(label)label.textContent=`${pm.label} — الدفع بعملة ${selectedCurrency.code}`;
+ }
+}
+
+function placeOrder(e,id){
+ e.preventDefault();
+ const g=games.find(x=>x.id===id),i=Number(document.querySelector('input[name=pkg]:checked').value),p=g.packages[i],pid=document.getElementById('playerId').value.trim();
+ const fromPhone=document.getElementById('fromPhone').value.trim(),transferRef=document.getElementById('transferRef').value.trim(),file=document.getElementById('proof').files[0];
+ if(!file){alert('ارفع Screenshot لإثبات التحويل.');return}
+ if(file.size>2.5*1024*1024){alert('حجم الصورة كبير. اختر صورة أقل من 2.5 ميجابايت.');return}
+ const reader=new FileReader();
+ reader.onload=()=>{
+  orders.push({
+   id:Date.now(),user:user.name,userId:user.id,username:user.username,game:g.name,package:p[0],amount:p[1],playerId:pid,
+   payment:document.querySelector('input[name=paymentMethod]:checked')?.value||'vodafone',paymentLabel:getPaymentMethod(document.querySelector('input[name=paymentMethod]:checked')?.value||'vodafone').label,paymentDetails:getPaymentMethod(document.querySelector('input[name=paymentMethod]:checked')?.value||'vodafone').details,toPhone:shift.phone,fromPhone,transferRef,
+   proof:reader.result,status:shift.online?'تم استلام طلبك':'طلبك قيد الانتظار',internalStatus:'بانتظار التحقق',currency:selectedCurrency.code,currencyName:selectedCurrency.name,displayAmount:Number(p[1])*selectedCurrency.rate,rate:selectedCurrency.rate,auto:!!shift.auto,
+   date:new Date().toLocaleString('ar-EG')
+  });
+  const createdOrder=orders[orders.length-1];
+  addNotification(user.id,shift.online?'تم استلام طلبك':'طلبك قيد الانتظار',shift.online?'تم استلام طلبك وسيتم التحقق منه من الإدارة.':'الشيفت غير متصل حالياً، وطلبك قيد الانتظار حتى يتم فتح الشيفت.', 'success',createdOrder.id);
+  save();closeModal();alert(shift.online?'تم استلام طلبك.':'طلبك قيد الانتظار حتى يتم فتح الشيفت.');
+ };
+ reader.readAsDataURL(file);
+}
+
+function auth(){
+ show(`<h2 class="text-2xl font-black mb-2">دخول / حساب جديد</h2>
+ <p class="text-xs text-slate-400 mb-5">سجّل باسم مستخدم وكلمة مرور، وسيتم إنشاء ID خاص بك يظهر للإدارة والدعم الفني.</p>
+ <form onsubmit="login(event)">
+  <label class="text-xs font-bold">Username</label><input id="username" required class="w-full mt-2 mb-3 bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="اسم المستخدم">
+  <label class="text-xs font-bold">Password</label><input id="userPass" type="password" required class="w-full mt-2 mb-4 bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="كلمة المرور">
+  <button class="w-full py-3 rounded-xl bg-emerald-500 text-slate-950 font-black">دخول / إنشاء حساب</button>
+ </form>
+`);
+}
+function makeCustomerId(){return 'LJ'+Math.floor(100000+Math.random()*900000)}
+function login(e){
+ e.preventDefault();
+ const name=document.getElementById('username').value.trim();
+ const pass=document.getElementById('userPass').value;
+ if(!name||!pass)return;
+ let u=usersDB.find(x=>x.username.toLowerCase()===name.toLowerCase());
+ if(u){
+  if(u.password!==pass){alert('كلمة المرور غير صحيحة.');return}
+  user=u;
+ }else{
+  u={id:makeCustomerId(),username:name,password:pass,name,balance:0,createdAt:new Date().toLocaleString('ar-EG')};
+  usersDB.push(u); localStorage.setItem('lj_users',JSON.stringify(usersDB)); user=u;
+ }
+ localStorage.setItem('lj_user',JSON.stringify(user));
+ closeModal(); render();
+}
+
+function saveStaff(){localStorage.setItem('lj_staff',JSON.stringify(staffDB))}
+function saveUsers(){localStorage.setItem('lj_users',JSON.stringify(usersDB))}
+function adminSaveGames(){localStorage.setItem('lj_games',JSON.stringify(games))}
+
+let paymentMethods=JSON.parse(localStorage.getItem('lj_payment_methods')||'null')||{
+  vodafone:{enabled:true,label:'فودافون كاش',details:''},
+  saudi:{enabled:true,label:'حوالة السعودية',details:''},
+  usd:{enabled:true,label:'حوالة USD بالدولار',details:''}
+};
+function savePaymentMethods(){localStorage.setItem('lj_payment_methods',JSON.stringify(paymentMethods))}
+function getPaymentMethod(id){return paymentMethods[id]||{enabled:false,label:id,details:''}}
+
+function preferredPaymentForCurrency(code){
+  if(code==='SAR') return 'saudi';
+  if(code==='USD') return 'usd';
+  return 'vodafone';
+}
+function paymentMethodOrderForCurrency(){
+  const preferred=preferredPaymentForCurrency(selectedCurrency.code);
+  return [preferred,...['vodafone','saudi','usd'].filter(k=>k!==preferred)];
+}
+
+
+let supportMessages=JSON.parse(localStorage.getItem('lj_support_messages')||'[]');
+function saveSupport(){localStorage.setItem('lj_support_messages',JSON.stringify(supportMessages))}
+function supportName(){return user ? (user.username+' | '+user.id) : 'زائر'}
+function openSupport(){
+ if(!user){auth();return}
+ const mine=supportMessages.filter(m=>m.userId===user.id);
+ const unread=mine.filter(m=>m.sender==='admin'&&!m.read).length;
+ mine.forEach(m=>{if(m.sender==='admin')m.read=true}); saveSupport();
+ show(`<div class="flex items-center justify-between mb-4"><div><h2 class="text-xl font-black">الدعم الفني ${unread?`<span class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">${unread} جديد</span>`:''}</h2><p class="text-xs text-slate-400">رقمك: ${esc(user.id)}</p></div><button onclick="account()" class="text-xs text-emerald-400">حسابي</button></div>
+ <div class="bg-slate-900 rounded-2xl p-3 max-h-64 overflow-y-auto scrollbar space-y-2">${mine.length?mine.map(m=>`<div class="rounded-xl p-3 ${m.sender==='admin'?'bg-emerald-500/10 border border-emerald-500/20':'bg-slate-800'}"><div class="text-xs font-bold">${m.sender==='admin'?'الإدارة':'أنت'}</div><div class="text-sm mt-1">${esc(m.text)}</div><div class="text-[10px] text-slate-500 mt-1">${esc(m.date)}</div></div>`).join(''):'<div class="text-sm text-slate-500 text-center py-6">لا توجد رسائل بعد. الإدارة تستطيع بدء محادثة معك حتى لو لم ترسل رسالة.</div>'}</div>
+ <form onsubmit="sendSupport(event)" class="mt-3"><textarea id="supportText" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 min-h-24" placeholder="اكتب مشكلتك أو استفسارك..."></textarea><button class="w-full mt-2 py-3 rounded-xl bg-emerald-500 text-slate-950 font-black">إرسال للدعم</button></form>`);
+}
+function sendSupport(e){e.preventDefault();const t=document.getElementById('supportText').value.trim();if(!t)return;supportMessages.push({id:Date.now(),userId:user.id,username:user.username,sender:'user',text:t,date:new Date().toLocaleString('ar-EG'),read:true});saveSupport();openSupport()}
+function account(){
+ if(!user){auth();return}
+ const mine=orders.filter(o=>o.userId===user.id || o.user===user.name);
+ show(`<div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-black">حسابي</h2><p class="text-xs text-slate-400 mt-1">Username: ${esc(user.username)}</p><p class="text-xs text-emerald-400 font-mono mt-1">ID: ${esc(user.id)}</p></div><button onclick="logout()" class="px-3 py-2 rounded-xl bg-red-500/10 text-red-400 text-xs font-bold">خروج</button></div>
+ <div class="grid grid-cols-2 gap-2 mb-4"><button onclick="openSupport()" class="glass rounded-xl p-4 text-right"><b>الدعم الفني</b><div class="text-xs text-slate-500 mt-1">تواصل مع الإدارة</div></button><button onclick="myOrders()" class="glass rounded-xl p-4 text-right"><b>طلباتي</b><div class="text-xs text-slate-500 mt-1">${mine.length} طلب</div></button></div>
+ <div class="bg-slate-900 rounded-2xl p-4"><div class="text-xs text-slate-500">معرّف العميل</div><div class="font-mono text-2xl font-black text-emerald-400 mt-1">${esc(user.id)}</div></div>`);
+}
+function myOrders(){
+ const mine=orders.filter(o=>o.userId===user.id || o.user===user.name);
+ show(`<h2 class="text-xl font-black mb-4">طلباتي</h2><div class="space-y-3">${mine.length?mine.slice().reverse().map(o=>`<div class="bg-slate-900 rounded-xl p-3 text-xs"><div class="flex justify-between gap-2"><b>${esc(o.game)}</b><span class="text-emerald-400">${esc(o.status)}</span></div><div class="mt-2">${esc(o.package)} — ${o.amount} ج.م</div><div class="text-slate-500 mt-1">ID الحساب: ${esc(o.playerId)}</div><div class="text-slate-500 mt-1">${esc(o.date)}</div>${o.adminNote?`<div class="mt-2 text-amber-300">ملاحظة الإدارة: ${esc(o.adminNote)}</div>`:''}</div>`).join(''):'<p class="text-slate-500 text-sm">لا توجد طلبات.</p>'}</div><button onclick="account()" class="w-full mt-4 py-3 rounded-xl bg-slate-800 font-bold">رجوع</button>`);
+}
+function adminAddGameForm(){show(`<h2 class="text-xl font-black mb-4">إضافة لعبة / تطبيق</h2><form onsubmit="addGame(event)" class="space-y-3"><input id="newGameName" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="اسم اللعبة أو التطبيق"><input id="newGameImage" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="رابط صورة اللعبة"><input id="newGamePackage" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="اسم أول باقة - مثال 100 جوهرة"><input id="newGamePrice" type="number" min="0" step="0.01" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="سعر الباقة بالجنيه"><button class="w-full py-3 rounded-xl bg-emerald-500 text-slate-950 font-black">إضافة التطبيق</button></form><button onclick="adminGames()" class="w-full mt-3 py-3 rounded-xl bg-slate-800 font-bold">رجوع</button>`)}
+function addGame(e){e.preventDefault();const name=document.getElementById('newGameName').value.trim(),image=document.getElementById('newGameImage').value.trim(),pkg=document.getElementById('newGamePackage').value.trim(),price=Number(document.getElementById('newGamePrice').value);if(!name||!image||!pkg||!Number.isFinite(price)||price<0)return;let id=name.toLowerCase().replace(/[^a-z0-9؀-ۿ]+/g,'-')+'-'+Date.now();games.push({id,name,image,packages:[[pkg,price]]});adminSaveGames();render();adminGames()}
+function deleteGame(i){if(confirm('حذف اللعبة/التطبيق وكل باقاته؟')){games.splice(i,1);adminSaveGames();render();adminGames()}}
+function deletePackage(gi,pi){if(games[gi].packages.length<=1){alert('يجب أن تظل باقة واحدة على الأقل.');return}if(confirm('حذف هذه الباقة؟')){games[gi].packages.splice(pi,1);adminSaveGames();render();adminGames()}}
+function editGameImage(i){const g=games[i],n=prompt('رابط صورة اللعبة:',g.image);if(n!==null&&n.trim()){g.image=n.trim();adminSaveGames();render();adminGames()}}
+function adminOrders(){
+ if(!hasPermission('orders')){alert('الأونر قافل صلاحية الطلبات لهذا الحساب.');return}
+ if(adminRole==='shift') return shiftOrders();
+ if(adminRole!=='admin') return adminPanel();
+ show(`<h2 class="text-xl font-black mb-4">طلبات الشحن والتحويل</h2><div class="flex gap-2 mb-3"><button onclick="adminOrders()" class="flex-1 py-2 rounded-lg bg-slate-800 text-xs">كل الطلبات</button><button onclick="adminPending()" class="flex-1 py-2 rounded-lg bg-emerald-500 text-slate-950 text-xs font-black">بانتظار التحقق</button></div><div class="space-y-3">${orders.length?orders.slice().reverse().map((o,i)=>adminOrderCard(o,orders.length-1-i)).join(''):'<p class="text-slate-500 text-sm">لا توجد طلبات.</p>'}</div><button onclick="adminPanel()" class="w-full mt-4 py-3 rounded-xl bg-slate-800 font-bold">رجوع</button>`);
+}
+function adminPending(){if(adminRole==='shift') return shiftOrders(); if(adminRole!=='admin') return adminPanel(); show(`<h2 class="text-xl font-black mb-4">الطلبات المعلقة</h2><div class="space-y-3">${orders.filter(o=>(o.internalStatus||o.status)==='بانتظار التحقق').map(o=>adminOrderCard(o,orders.indexOf(o))).join('')||'<p class="text-slate-500 text-sm">لا توجد طلبات معلقة.</p>'}</div><button onclick="adminPanel()" class="w-full mt-4 py-3 rounded-xl bg-slate-800 font-bold">رجوع</button>`)}
+function adminOrderCard(o,i){return `<div class="bg-slate-900 rounded-2xl p-4 text-xs"><div class="flex justify-between gap-2"><b>${esc(o.game)}</b><span class="${(o.internalStatus||o.status)==='بانتظار التحقق'?'text-amber-400':o.status==='مرفوض'?'text-red-400':'text-emerald-400'}">${esc(o.status)}</span></div><div class="mt-2">العميل: <b>${esc(o.username||o.user)}</b> <span class="font-mono text-emerald-400">${esc(o.userId||'')}</span></div><div class="mt-1">الباقة: ${esc(o.package)} — <b>${o.amount} ج.م</b></div><div class="mt-1">Player ID: <b>${esc(o.playerId)}</b></div><div class="mt-1">من رقم: ${esc(o.fromPhone)} — مرجع: ${esc(o.transferRef)}</div><div class="mt-1 text-slate-500">إلى: ${esc(o.toPhone)} — ${esc(o.date)}</div>${o.proof?`<img src="${o.proof}" class="w-full max-h-64 object-contain rounded-xl mt-3 bg-black" alt="إثبات التحويل">`:''}<div class="grid grid-cols-2 gap-2 mt-3">${(o.internalStatus||o.status)==='بانتظار التحقق'?`<button onclick="approveOrder(${i})" class="py-3 rounded-xl bg-emerald-500 text-slate-950 font-black">موافقة / تم التنفيذ</button><button onclick="rejectOrder(${i})" class="py-3 rounded-xl bg-red-500/10 text-red-400 font-black">رفض</button>`:''}<button onclick="orderNote(${i})" class="py-3 rounded-xl bg-slate-800 font-bold ${o.status==='بانتظار التحقق'?'col-span-2':''}">ملاحظة</button></div></div>`}
+function approveOrder(i){if(adminRole!=='admin'&&adminRole!=='shift'){alert('غير مسموح');return} const o=orders[i];if(!o)return;const note=prompt('ملاحظة التنفيذ (اختياري):','تم شحن الطلب في منصة بريو بنجاح.');o.status='تم الشحن في منصة بريو';o.internalStatus='تمت الموافقة والتنفيذ';o.adminNote=note||'تم شحن الطلب في منصة بريو بنجاح.';o.approvedAt=new Date().toLocaleString('ar-EG');save();addNotification(o.userId,'تم الشحن بنجاح',`تم شحن طلبك في منصة بريو بنجاح. ${o.adminNote}`,'success',o.id);adminOrders()}
+function rejectOrder(i){if(adminRole!=='admin'&&adminRole!=='shift'){alert('غير مسموح');return} const o=orders[i];if(!o)return;const note=prompt('سبب الرفض:','لم يتم التحقق من التحويل.');o.status='مرفوض';o.internalStatus='مرفوض';o.adminNote=note||'لم يتم التحقق من التحويل.';o.rejectedAt=new Date().toLocaleString('ar-EG');save();addNotification(o.userId,'تم رفض طلب الشحن',`تم رفض طلبك الخاص بـ ${o.game} (${o.package}). السبب: ${o.adminNote}`,'error',o.id);adminOrders()}
+function orderNote(i){if(adminRole!=='admin'&&adminRole!=='shift'){alert('غير مسموح');return} const o=orders[i];if(!o)return;const note=prompt('ملاحظة الإدارة:',o.adminNote||'');if(note!==null){o.adminNote=note;save();adminOrders()}}
+function adminSupport(){if(!hasPermission('support')){alert('الأونر قافل صلاحية الدعم لهذا الحساب.');return} 
+ const ids=[...new Set([...supportMessages.map(m=>m.userId),...usersDB.map(u=>u.id)])];
+ show(`<h2 class="text-xl font-black mb-4">الدعم الفني</h2><p class="text-xs text-slate-400 mb-3">هنا تقدر تفتح محادثة مع أي عميل مباشرة، حتى لو لم يرسل لك أي رسالة.</p><div class="space-y-2">${ids.length?ids.map(id=>{const ms=supportMessages.filter(m=>m.userId===id),u=usersDB.find(x=>x.id===id),last=ms[ms.length-1],unread=ms.filter(m=>m.sender==='user'&&!m.read).length;return `<button onclick="adminChat('${esc(id)}')" class="w-full bg-slate-900 rounded-xl p-3 text-right"><div class="flex justify-between gap-2"><b>${esc(u?.username||last?.username||id)}</b><span class="font-mono text-emerald-400">${esc(id)}</span></div><div class="text-xs text-slate-500 mt-1">${unread?`<span class="text-amber-400">${unread} رسالة جديدة</span>`:(last?esc(last.text):'لا توجد رسائل — اضغط لبدء المحادثة')}</div></button>`}).join(''):'<p class="text-slate-500 text-sm">لا يوجد عملاء بعد.</p>'}</div><button onclick="adminPanel()" class="w-full mt-4 py-3 rounded-xl bg-slate-800 font-bold">رجوع</button>`)
+}
+function startSupportChat(id){
+ const u=usersDB.find(x=>x.id===id);
+ if(!u){alert('العميل غير موجود');return}
+ const hasThread=supportMessages.some(m=>m.userId===id);
+ if(!hasThread){
+   supportMessages.push({id:Date.now(),userId:id,username:u.username,sender:'admin',text:'مرحباً بك، معك الدعم الفني من الإدارة. تواصل معنا هنا في أي وقت.',date:new Date().toLocaleString('ar-EG'),read:false});
+   saveSupport();
+ }
+ adminChat(id);
+}
+function adminChat(id){
+ const u=usersDB.find(x=>x.id===id);
+ const ms=supportMessages.filter(m=>m.userId===id);
+ const name=u?.username||ms[0]?.username||id;
+ ms.forEach(m=>{if(m.sender==='user')m.read=true}); saveSupport();
+ show(`<h2 class="text-xl font-black mb-3">دعم ${esc(name)}</h2><div class="text-xs text-emerald-400 font-mono mb-3">${esc(id)}</div><div class="bg-slate-900 rounded-2xl p-3 max-h-64 overflow-y-auto scrollbar space-y-2">${ms.length?ms.map(m=>`<div class="rounded-xl p-3 ${m.sender==='admin'?'bg-emerald-500/10':'bg-slate-800'}"><div class="text-xs font-bold">${m.sender==='admin'?'الإدارة':'العميل'}</div><div class="text-sm mt-1">${esc(m.text)}</div><div class="text-[10px] text-slate-500 mt-1">${esc(m.date)}</div></div>`).join(''):'<div class="text-sm text-slate-500 text-center py-6">لم تبدأ المحادثة بعد. اكتب أول رسالة للعميل.</div>'}</div><form onsubmit="replySupport(event,'${esc(id)}')" class="mt-3"><textarea id="adminReply" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 min-h-20" placeholder="اكتب رسالة للعميل..."></textarea><button class="w-full mt-2 py-3 rounded-xl bg-emerald-500 text-slate-950 font-black">إرسال للعميل</button></form><button onclick="adminSupport()" class="w-full mt-3 py-3 rounded-xl bg-slate-800 font-bold">رجوع</button>`)
+}
+function replySupport(e,id){
+ e.preventDefault();
+ const t=document.getElementById('adminReply').value.trim();
+ if(!t)return;
+ const u=usersDB.find(x=>x.id===id);
+ const last=supportMessages.filter(m=>m.userId===id).pop();
+ supportMessages.push({id:Date.now(),userId:id,username:u?.username||last?.username||id,sender:'admin',text:t,date:new Date().toLocaleString('ar-EG'),read:false});
+ saveSupport();
+ adminChat(id);
+}
+
+function adminLogin(){
+ show(`<h2 class="text-2xl font-black mb-2">دخول الإدارة</h2>
+ <p class="text-xs text-slate-400 mb-5">هذه القائمة خاصة بالمسؤولين.</p>
+ <form onsubmit="doAdminLogin(event)" class="space-y-3">
+ <input id="adminUser" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="Username">
+ <input id="adminPass" type="password" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="Password">
+ <button class="w-full py-3 rounded-xl bg-emerald-500 text-slate-950 font-black">دخول الإدارة</button>
+ </form>`);
+}
+function doAdminLogin(e){
+ e.preventDefault();
+ const u=document.getElementById('adminUser').value.trim(), p=document.getElementById('adminPass').value;
+ const staff=staffDB.find(x=>x.username===u && x.password===p);
+ if(u===ADMIN_USER&&p===ADMIN_PASS){
+   adminSession=true; adminRole='admin';
+   localStorage.setItem('lj_admin','1'); localStorage.setItem('lj_admin_name',u); localStorage.setItem('lj_admin_role','admin');
+   closeModal(); adminPanel();
+ }else if(staff){
+   if(staff.active===false){alert('هذا الحساب موقوف حالياً من الأونر.');return}
+   adminSession=true; adminRole=staff.role||'admin';
+   localStorage.setItem('lj_admin','1'); localStorage.setItem('lj_admin_name',u); localStorage.setItem('lj_admin_role',adminRole);
+   localStorage.setItem('lj_staff_user',u);
+   closeModal(); adminPanel();
+ }else alert('اسم المستخدم أو كلمة المرور غير صحيحة.');
+}
+function adminLogout(){adminSession=false;adminRole='admin';localStorage.removeItem('lj_admin');localStorage.removeItem('lj_admin_name');localStorage.removeItem('lj_admin_role');localStorage.removeItem('lj_staff_user');window.adminMode=false;closeModal();render()}
+function shiftPanel(){
+ window.adminMode=true;
+ const modal=document.getElementById('modal');
+ modal.classList.remove('hide'); modal.classList.add('admin-mode');
+ modal.innerHTML=`<div class="admin-shell">
+  <div class="admin-topbar">
+   <div>
+    <div class="text-xl md:text-2xl font-black">لوحة الشيفت</div>
+    <div class="text-xs text-slate-400 mt-1">حساب شيفت: ${esc(localStorage.getItem('lj_admin_name')||'')}</div>
+   </div>
+   <button onclick="adminLogout()" class="px-5 py-3 rounded-xl bg-red-500 text-white font-black">خروج</button>
+  </div>
+  <div class="admin-layout">
+   <aside class="admin-sidebar scrollbar">
+    <div class="admin-nav-grid">
+     <button onclick="shiftOrders()" class="admin-nav-btn">📦 طلبات الشحن</button>
+     <button onclick="shiftSettings()" class="admin-nav-btn">📱 رقم الشيفت</button>
+    </div>
+    <div class="mt-4 p-4 rounded-2xl bg-slate-900 border border-white/5 text-sm text-slate-400 leading-7">
+      حساب الشيفت مخصص لتنفيذ الطلبات فقط.<br>
+      لا يمكنه إدارة المستخدمين أو الألعاب أو المسؤولين أو إعدادات الموقع.
+    </div>
+    <button onclick="adminLogout()" class="admin-exit-btn bg-red-500 text-white">خروج من الشيفت</button>
+   </aside>
+   <main id="adminContent" class="admin-main scrollbar"></main>
+  </div>
+ </div>`;
+ shiftOrders();
+}
+function shiftOrders(){
+ if(adminRole==='shift' && !hasPermission('orders')){alert('الأونر قافل صلاحية الطلبات لهذا الشيفت.');return}
+ if(adminRole!=='shift') return adminPanel();
+ const main=document.getElementById('adminContent'); if(!main)return;
+ const pending=orders.filter(o=>o.status==='بانتظار التحقق');
+ main.innerHTML=`<div class="max-w-5xl mx-auto">
+  <h2 class="text-2xl font-black mb-2">طلبات الشحن</h2>
+  <p class="text-sm text-slate-400 mb-5">من هنا تقدر تراجع الإثبات وتقبل أو ترفض الطلب.</p>
+  <div class="mb-4 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+    <b>رقم الشيفت الحالي:</b> <span class="font-mono text-emerald-400">${esc(shift.phone||'غير محدد')}</span>
+  </div>
+  <div class="space-y-3">${pending.length?pending.map(o=>adminOrderCard(o,orders.indexOf(o))).join(''):'<div class="glass rounded-2xl p-8 text-center text-slate-500">لا توجد طلبات معلقة حالياً.</div>'}</div>
+ </div>`;
+}
+function shiftSettings(){
+ if(adminRole==='shift' && !hasPermission('shift')){alert('الأونر قافل صلاحية رقم الشيفت.');return}
+ if(adminRole!=='shift') return adminPanel();
+ const main=document.getElementById('adminContent'); if(!main)return;
+ main.innerHTML=`<div class="max-w-2xl">
+  <h2 class="text-2xl font-black mb-2">رقم الشيفت</h2>
+  <p class="text-sm text-slate-400 mb-5">الشيفت يقدر يغيّر رقم استقبال التحويلات فقط.</p>
+  <div class="admin-settings-card">
+   <label class="block text-sm font-black mb-2">رقم فودافون كاش / التحويل</label>
+   <input id="shiftPhoneOnly" value="${esc(shift.phone||'')}" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-lg font-bold" placeholder="اكتب رقم الشيفت">
+   <button onclick="saveShiftPhoneOnly()" class="w-full mt-4 py-4 rounded-xl bg-emerald-500 text-slate-950 font-black">حفظ الرقم</button>
+  </div>
+ </div>`;
+}
+function saveShiftPhoneOnly(){
+ if(adminRole!=='shift') return;
+ const v=document.getElementById('shiftPhoneOnly')?.value.trim();
+ if(!v){alert('اكتب رقم الشيفت');return}
+ shift.phone=v; saveShift(); shiftSettings();
+}
+function currentStaff(){
+ const u=localStorage.getItem('lj_staff_user');
+ return staffDB.find(x=>x.username===u)||null;
+}
+function hasPermission(key){
+ if(adminRole==='admin' && !currentStaff()) return true; // owner
+ const s=currentStaff();
+ return !!(s && s.active!==false && s.permissions && s.permissions[key]);
+}
+function ownerOnly(){
+ if(adminRole==='admin' && !currentStaff()) return true;
+ alert('هذه الصلاحية متاحة للأونر فقط.');
+ return false;
+}
+function saveStaff(){localStorage.setItem('lj_staff',JSON.stringify(staffDB))}
+function staffPermissionLabel(s){
+ if(s.role==='shift'){
+   const p=s.permissions||{};
+   return ['orders','shift'].filter(k=>p[k]).length===2?'طلبات + رقم الشيفت':'صلاحيات محددة';
+ }
+ const p=s.permissions||{};
+ const n=['orders','support','users','games','shift'].filter(k=>p[k]).length;
+ return n===5?'كل الصلاحيات':`${n} صلاحيات`;
+}
+function editStaffPermissions(i){
+ if(!ownerOnly()) return;
+ const s=staffDB[i]; if(!s)return;
+ const p=s.permissions||{orders:true,support:true,users:true,games:true,shift:true};
+ show(`<h2 class="text-xl font-black mb-2">صلاحيات: ${esc(s.username)}</h2>
+ <p class="text-xs text-slate-400 mb-4">الأونر فقط يقدر يفتح أو يقفل أي صلاحية لهذا الحساب.</p>
+ <div class="space-y-2">
+  <label class="flex items-center justify-between bg-slate-900 rounded-xl p-4"><span>📦 طلبات الشحن — قبول/رفض</span><input id="perm_orders" type="checkbox" ${p.orders?'checked':''} class="w-5 h-5"></label>
+  <label class="flex items-center justify-between bg-slate-900 rounded-xl p-4"><span>💬 الدعم الفني</span><input id="perm_support" type="checkbox" ${p.support?'checked':''} class="w-5 h-5"></label>
+  <label class="flex items-center justify-between bg-slate-900 rounded-xl p-4"><span>👥 المستخدمون والعملاء</span><input id="perm_users" type="checkbox" ${p.users?'checked':''} class="w-5 h-5"></label>
+  <label class="flex items-center justify-between bg-slate-900 rounded-xl p-4"><span>🎮 الألعاب والأسعار</span><input id="perm_games" type="checkbox" ${p.games?'checked':''} class="w-5 h-5"></label>
+  <label class="flex items-center justify-between bg-slate-900 rounded-xl p-4"><span>📱 إعدادات الشيفت والرقم</span><input id="perm_shift" type="checkbox" ${p.shift?'checked':''} class="w-5 h-5"></label>
+ </div>
+ <button onclick="saveStaffPermissions(${i})" class="w-full mt-4 py-4 rounded-xl bg-emerald-500 text-slate-950 font-black">حفظ الصلاحيات</button>
+ <button onclick="disableStaffAll(${i})" class="w-full mt-2 py-4 rounded-xl bg-red-500 text-white font-black">🔒 قفل كل الصلاحيات</button>`);
+}
+function saveStaffPermissions(i){
+ if(!ownerOnly()) return;
+ const s=staffDB[i]; if(!s)return;
+ s.permissions={
+  orders:document.getElementById('perm_orders').checked,
+  support:document.getElementById('perm_support').checked,
+  users:document.getElementById('perm_users').checked,
+  games:document.getElementById('perm_games').checked,
+  shift:document.getElementById('perm_shift').checked
+ };
+ saveStaff(); adminStaff();
+}
+function disableStaffAll(i){
+ if(!ownerOnly()) return;
+ const s=staffDB[i]; if(!s)return;
+ s.active=false;
+ s.permissions={orders:false,support:false,users:false,games:false,shift:false};
+ saveStaff(); adminStaff();
+}
+function toggleStaffActive(i){
+ if(!ownerOnly()) return;
+ const s=staffDB[i]; if(!s)return;
+ s.active=s.active===false;
+ if(!s.active)s.permissions={orders:false,support:false,users:false,games:false,shift:false};
+ saveStaff(); adminStaff();
+}
+function adminPanel(){
+ if(!adminSession){adminLogin();return}
+ if(adminRole==='shift'){shiftPanel();return}
+ window.adminMode=true;
+ const modal=document.getElementById('modal');
+ modal.classList.remove('hide');
+ modal.classList.add('admin-mode');
+ modal.innerHTML=`<div class="admin-shell">
+  <div class="admin-topbar">
+   <div>
+    <div class="text-xl md:text-2xl font-black">لوحة الإدارة</div>
+    <div class="text-xs text-slate-400 mt-1">المستخدم: ${esc(localStorage.getItem('lj_admin_name')||ADMIN_USER)} — ${adminRole==='shift'?'شيفت':'مسؤول كامل'}</div>
+   </div>
+   <button onclick="adminLogout()" class="px-5 py-3 rounded-xl bg-red-500 text-white font-black">خروج من الإدارة</button>
+  </div>
+  <div class="admin-layout">
+   <aside class="admin-sidebar scrollbar">
+    <div class="admin-nav-grid">
+     <button onclick="adminPanelHome()" class="admin-nav-btn">🏠 الرئيسية</button>
+     ${hasPermission('users')?`<button onclick="adminUsers()" class="admin-nav-btn">👥 المستخدمون <span class="text-slate-500 text-xs">(${usersDB.length})</span></button>`:''}
+     ${hasPermission('orders')?`<button onclick="adminOrders()" class="admin-nav-btn">📦 طلبات الشحن <span class="text-amber-400 text-xs">(${orders.filter(o=>o.status==='بانتظار التحقق').length})</span></button>`:''}
+     ${hasPermission('support')?`<button onclick="adminSupport()" class="admin-nav-btn">💬 الدعم الفني</button>`:''}
+     ${(!currentStaff())?`<button onclick="adminStaff()" class="admin-nav-btn">🛡️ المسؤولون والصلاحيات <span class="text-slate-500 text-xs">(${staffDB.length})</span></button>`:''}
+     ${hasPermission('games')?`<button onclick="adminGames()" class="admin-nav-btn">🎮 الألعاب والتطبيقات</button>`:''}
+     ${(!currentStaff())?`<button onclick="adminCurrencySettings()" class="admin-nav-btn">💱 أسعار الدول والعملات</button>`:''}
+     ${hasPermission('shift')?`<button onclick="adminShift()" class="admin-nav-btn">⚙️ الشيفت</button>`:''}
+     ${(!currentStaff())?`<button onclick="adminSiteSettings()" class="admin-nav-btn">✏️ اسم الموقع</button>`:''}
+    </div>
+    <button onclick="adminLogout()" class="admin-exit-btn bg-red-500 text-white">خروج من الإدارة</button>
+   </aside>
+   <main id="adminContent" class="admin-main scrollbar"></main>
+  </div>
+ </div>`;
+ adminPanelHome();
+}
+function adminPanelHome(){
+ const main=document.getElementById('adminContent');
+ if(!main)return;
+ const owner=!currentStaff();
+ if(!owner){
+  const s=currentStaff();
+  main.innerHTML=`<div class="max-w-4xl mx-auto">
+   <h2 class="text-2xl font-black mb-2">لوحة الصلاحيات المتاحة</h2>
+   <p class="text-sm text-slate-400 mb-5">الأونر هو الذي يحدد ما يمكنك استخدامه.</p>
+   <div class="grid md:grid-cols-2 gap-4">
+    ${hasPermission('orders')?`<button onclick="adminOrders()" class="glass rounded-2xl p-6 text-right min-h-32"><div class="text-2xl">📦</div><b class="text-lg">طلبات الشحن</b></button>`:''}
+    ${hasPermission('support')?`<button onclick="adminSupport()" class="glass rounded-2xl p-6 text-right min-h-32"><div class="text-2xl">💬</div><b class="text-lg">الدعم الفني</b></button>`:''}
+    ${hasPermission('users')?`<button onclick="adminUsers()" class="glass rounded-2xl p-6 text-right min-h-32"><div class="text-2xl">👥</div><b class="text-lg">المستخدمون</b></button>`:''}
+    ${hasPermission('games')?`<button onclick="adminGames()" class="glass rounded-2xl p-6 text-right min-h-32"><div class="text-2xl">🎮</div><b class="text-lg">الألعاب والأسعار</b></button>`:''}
+    ${hasPermission('shift')?`<button onclick="adminShift()" class="glass rounded-2xl p-6 text-right min-h-32"><div class="text-2xl">⚙️</div><b class="text-lg">الشيفت والرقم</b></button>`:''}
+   </div>
+  </div>`;
+  return;
+ }
+ main.innerHTML=`<div class="max-w-5xl mx-auto">
+  <div class="mb-6"><h2 class="text-2xl md:text-3xl font-black">مرحباً بالأونر</h2><p class="text-sm text-slate-400 mt-2">أنت المتحكم في كل صلاحيات الحسابات.</p></div>
+  <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+   <button onclick="adminUsers()" class="glass rounded-2xl p-6 text-right min-h-32"><div class="text-2xl mb-2">👥</div><b class="text-lg">المستخدمون</b><div class="text-sm text-slate-500 mt-2">${usersDB.length} مستخدم</div></button>
+   <button onclick="adminOrders()" class="glass rounded-2xl p-6 text-right min-h-32"><div class="text-2xl mb-2">📦</div><b class="text-lg">طلبات الشحن</b><div class="text-sm text-amber-400 mt-2">${orders.filter(o=>o.status==='بانتظار التحقق').length} طلبات معلقة</div></button>
+   <button onclick="adminSupport()" class="glass rounded-2xl p-6 text-right min-h-32"><div class="text-2xl mb-2">💬</div><b class="text-lg">الدعم الفني</b></button>
+   <button onclick="adminGames()" class="glass rounded-2xl p-6 text-right min-h-32"><div class="text-2xl mb-2">🎮</div><b class="text-lg">الألعاب والأسعار</b></button>
+   <button onclick="adminCurrencySettings()" class="glass rounded-2xl p-6 text-right min-h-32"><div class="text-2xl mb-2">💱</div><b class="text-lg">أسعار الدول والعملات</b><div class="text-sm text-slate-500 mt-2">العربية + OECD</div></button>
+   <button onclick="adminStaff()" class="glass rounded-2xl p-6 text-right min-h-32"><div class="text-2xl mb-2">🔐</div><b class="text-lg">المسؤولون والصلاحيات</b><div class="text-sm text-slate-500 mt-2">تحكم كامل في الحسابات</div></button>
+   <button onclick="adminSiteSettings()" class="glass rounded-2xl p-6 text-right min-h-32"><div class="text-2xl mb-2">✏️</div><b class="text-lg">إعدادات الموقع</b></button>
+  </div>
+ </div>`;
+}
+function adminCurrencySettings(){
+ if(adminRole!=='admin') return adminPanel();
+ const main=document.getElementById('adminContent'); if(!main)return;
+ const saved=JSON.parse(localStorage.getItem('lj_currency_rates')||'{}');
+ const rows=currencyOptions.map((c,i)=>{const rate=Number(saved[c.code]??c.rate);return `<div class="bg-slate-900 rounded-2xl p-4 border border-white/5"><div class="flex items-center justify-between gap-3 mb-3"><div><b>${esc(c.country)}</b><div class="text-xs text-slate-500 mt-1">${esc(c.name)} — ${esc(c.code)} ${c.group==='OECD'?'<span class="text-cyan-400">• OECD</span>':'<span class="text-amber-400">• عربي</span>'}</div></div><span class="text-xs text-slate-500">1 ${esc(c.code)} = ؟ ج.م</span></div><input data-currency-rate="${esc(c.code)}" type="number" min="0" step="0.000001" value="${rate}" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 font-bold"><div class="text-[10px] text-slate-500 mt-2">سعر التحويل المستخدم لعرض أسعار الباقات من الجنيه المصري.</div></div>`}).join('');
+ main.innerHTML=`<div class="max-w-5xl mx-auto"><div class="flex items-center justify-between gap-3 mb-2"><div><h2 class="text-2xl font-black">أسعار الدول والعملات</h2><p class="text-sm text-slate-400 mt-1">الدول العربية + دول OECD. السعر هنا للتحويل من الجنيه المصري إلى عملة العميل.</p></div><button onclick="adminPanelHome()" class="px-4 py-2 rounded-xl bg-slate-800 text-xs font-bold">رجوع</button></div><div class="grid md:grid-cols-2 gap-3 mt-5">${rows}</div><button onclick="saveAdminCurrencyRates()" class="w-full mt-5 py-4 rounded-xl bg-emerald-500 text-slate-950 font-black text-lg">حفظ تحديث أسعار العملات</button><p class="text-xs text-slate-500 mt-3">يمكن للإدارة تعديل سعر أي عملة في أي وقت، والأسعار المحفوظة تُستخدم مباشرة في واجهة العميل.</p></div>`;
+}
+function saveAdminCurrencyRates(){
+ if(adminRole!=='admin') return;
+ const rates={};
+ document.querySelectorAll('[data-currency-rate]').forEach(el=>{const code=el.getAttribute('data-currency-rate');const rate=Number(el.value);if(Number.isFinite(rate)&&rate>0)rates[code]=rate});
+ localStorage.setItem('lj_currency_rates',JSON.stringify(rates));
+ currencyOptions.forEach(c=>{if(rates[c.code])c.rate=rates[c.code]});
+ localStorage.setItem('lj_currency_options',JSON.stringify(currencyOptions));
+ alert('تم تحديث أسعار الدول والعملات.');
+ adminCurrencySettings();
+}
+function adminSiteSettings(){if(adminRole!=='admin') return adminPanel();
+ const main=document.getElementById('adminContent');
+ if(!main)return;
+ main.innerHTML=`<div class="max-w-3xl">
+  <h2 class="text-2xl font-black mb-2">إعدادات الموقع</h2>
+  <p class="text-sm text-slate-400 mb-5">غيّر اسم الموقع من هنا وسيظهر الاسم الجديد في أعلى الموقع، أسفل الصفحة، وعنوان الصفحة.</p>
+  <div class="admin-settings-card">
+   <label class="block text-sm font-black mb-2">اسم الموقع</label>
+   <input id="siteNameAdmin" value="${esc(siteName)}" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-lg font-bold" placeholder="اكتب اسم الموقع">
+   <button onclick="saveSiteNameAdmin()" class="w-full mt-4 py-4 rounded-xl bg-emerald-500 text-slate-950 font-black text-lg">حفظ اسم الموقع</button>
+   <div class="text-xs text-slate-500 mt-3">الاسم الحالي: <b class="text-emerald-400">${esc(siteName)}</b></div>
+  </div>
+ </div>`;
+}
+function saveSiteNameAdmin(){
+ const input=document.getElementById('siteNameAdmin');
+ const n=input?.value.trim();
+ if(!n){alert('اكتب اسم الموقع أولاً');return}
+ siteName=n;
+ saveSiteName();
+ applySiteBrand();
+ adminSiteSettings();
+}
+function adminUsers(){if(!hasPermission('users')){alert('الأونر قافل صلاحية المستخدمين لهذا الحساب.');return} if(adminRole!=='admin') return adminPanel();
+ show(`<h2 class="text-xl font-black mb-4">المستخدمون</h2><p class="text-xs text-slate-400 mb-3">تقدر تبدأ محادثة مع أي عميل مباشرة من هنا، حتى لو العميل لم يرسل للدعم من قبل.</p><div class="space-y-2">${usersDB.length?usersDB.map(u=>{const unread=supportMessages.filter(m=>m.userId===u.id&&m.sender==='user'&&!m.read).length;return `<div class="bg-slate-900 rounded-xl p-3 text-xs"><div class="flex justify-between gap-2"><b>${esc(u.username)}</b><b class="font-mono text-emerald-400">${esc(u.id)}</b></div><div class="text-slate-500 mt-1">${unread?`<span class="text-amber-400">${unread} رسالة جديدة</span>`:'لا توجد رسائل جديدة'}</div><button onclick="startSupportChat('${esc(u.id)}')" class="w-full mt-2 py-2 rounded-lg bg-emerald-500 text-slate-950 font-black">فتح محادثة مع العميل</button></div>`}).join(''):'<p class="text-slate-500 text-sm">لا يوجد مستخدمون.</p>'}</div><button onclick="adminPanel()" class="w-full mt-4 py-3 rounded-xl bg-slate-800 font-bold">رجوع</button>`);
+}
+function adminStaff(){
+ if(!ownerOnly()) return;
+ show(`<h2 class="text-xl font-black mb-4">المسؤولون والصلاحيات</h2>
+ <div class="grid md:grid-cols-2 gap-3 mb-4">
+  <button onclick="addStaffForm('admin')" class="w-full py-4 rounded-xl bg-emerald-500 text-slate-950 font-black">+ إضافة مسؤول</button>
+  <button onclick="addStaffForm('shift')" class="w-full py-4 rounded-xl bg-amber-400 text-slate-950 font-black">+ إضافة شيفت</button>
+ </div>
+ <div class="space-y-3">${staffDB.map((x,i)=>`<div class="bg-slate-900 rounded-2xl p-4 border ${x.active===false?'border-red-500/30':'border-white/5'}">
+   <div class="flex items-center justify-between gap-3">
+    <div>
+     <b>${esc(x.username)}</b>
+     <div class="text-xs mt-1 ${x.active===false?'text-red-400':'text-emerald-400'}">${x.active===false?'🔒 موقوف':'🟢 فعال'} — ${x.role==='shift'?'شيفت':'مسؤول'}</div>
+     <div class="text-xs text-slate-500 mt-1">${staffPermissionLabel(x)}</div>
+    </div>
+    <button onclick="deleteStaff(${i})" class="text-red-400 font-bold">حذف</button>
+   </div>
+   <div class="grid grid-cols-2 gap-2 mt-3">
+    <button onclick="editStaffPermissions(${i})" class="py-3 rounded-xl bg-slate-800 font-bold">🔐 الصلاحيات</button>
+    <button onclick="toggleStaffActive(${i})" class="py-3 rounded-xl ${x.active===false?'bg-emerald-500 text-slate-950':'bg-red-500 text-white'} font-bold">${x.active===false?'فتح الحساب':'قفل الحساب'}</button>
+   </div>
+  </div>`).join('')||'<p class="text-slate-500 text-sm">لا يوجد حسابات إضافية.</p>'}</div>`);
+}
+function addStaffForm(role='admin'){
+ if(adminRole!=='admin') return;
+ const isShift=role==='shift';
+ show(`<h2 class="text-xl font-black mb-2">${isShift?'إضافة حساب شيفت':'إضافة مسؤول كامل'}</h2>
+ <p class="text-xs text-slate-400 mb-4">${isShift?'الشيفت يقدر يقبل/يرفض الطلبات ويغيّر رقم الشيفت فقط.':'المسؤول الكامل يملك صلاحيات لوحة الإدارة.'}</p>
+ <form onsubmit="addStaff(event,'${role}')" class="space-y-3">
+  <input id="newStaffUser" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="Username">
+  <input id="newStaffPass" type="password" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="Password">
+  <button class="w-full py-3 rounded-xl ${isShift?'bg-amber-400 text-slate-950':'bg-emerald-500 text-slate-950'} font-black">إضافة</button>
+ </form>`);
+}
+function addStaff(e,role='admin'){
+ e.preventDefault();
+ if(adminRole!=='admin') return;
+ const u=document.getElementById('newStaffUser').value.trim(),p=document.getElementById('newStaffPass').value;
+ if(!u||!p)return;
+ if(u===ADMIN_USER||staffDB.some(x=>x.username===u)){alert('اسم المستخدم موجود بالفعل');return}
+ staffDB.push({
+  username:u,password:p,role:role==='shift'?'shift':'admin',
+  active:true,
+  permissions:role==='shift'
+    ? {orders:true,support:false,users:false,games:false,shift:true}
+    : {orders:true,support:true,users:true,games:true,shift:true}
+ });
+ saveStaff(); adminStaff();
+}
+function deleteStaff(i){if(confirm('حذف المسؤول؟')){staffDB.splice(i,1);saveStaff();adminStaff()}}
+function adminGames(){if(!hasPermission('games')){alert('الأونر قافل صلاحية الألعاب والأسعار لهذا الحساب.');return} if(adminRole!=='admin') return adminPanel();
+ show(`<div class="flex items-center justify-between mb-4"><h2 class="text-xl font-black">الألعاب والتطبيقات</h2><button onclick="adminAddGameForm()" class="px-3 py-2 rounded-xl bg-emerald-500 text-slate-950 text-xs font-black">+ إضافة تطبيق</button></div><div class="space-y-3">${games.map((g,gi)=>`<div class="bg-slate-900 rounded-xl p-3"><div class="flex items-center gap-3"><img src="${g.image}" class="w-14 h-14 rounded-xl object-cover"><div class="flex-1"><b>${esc(g.name)}</b><div class="text-[10px] text-slate-500">${g.packages.length} باقة</div></div><button onclick="editGameName(${gi})" class="text-emerald-400 text-xs">اسم</button><button onclick="editGameImage(${gi})" class="text-cyan-400 text-xs">صورة</button><button onclick="deleteGame(${gi})" class="text-red-400 text-xs">حذف</button></div><div class="space-y-2 mt-3">${g.packages.map((p,pi)=>`<div class="flex items-center gap-2 text-xs border border-slate-800 rounded-lg p-2"><span class="flex-1">${esc(p[0])}</span><span class="text-emerald-400">${p[1]} ج.م</span><button onclick="editPrice(${gi},${pi})" class="text-slate-400">تعديل</button><button onclick="deletePackage(${gi},${pi})" class="text-red-400">حذف</button></div>`).join('')}<button onclick="addPackage(${gi})" class="w-full mt-2 py-2 rounded-lg bg-slate-800 text-xs">+ إضافة باقة</button></div></div>`).join('')}</div><button onclick="adminPanel()" class="w-full mt-4 py-3 rounded-xl bg-slate-800 font-bold">رجوع</button>`);
+}
+function editGameName(i){const g=games[i];const n=prompt('اسم اللعبة:',g.name);if(n){g.name=n;adminSaveGames();render();adminGames()}}
+function editPrice(gi,pi){const g=games[gi],p=g.packages[pi];const name=prompt('اسم الباقة:',p[0]);if(name===null)return;const price=Number(prompt('السعر بالجنيه:',p[1]));if(Number.isFinite(price)&&price>=0){g.packages[pi]=[name,price];adminSaveGames();render();adminGames()}}
+function addPackage(gi){const name=prompt('اسم الباقة:');if(!name)return;const price=Number(prompt('السعر بالجنيه:'));if(Number.isFinite(price)&&price>=0){games[gi].packages.push([name,price]);adminSaveGames();render();adminGames()}}
+function adminShift(){
+ if(!hasPermission('shift')){alert('الأونر قافل صلاحية الشيفت لهذا الحساب.');return}
+ if(adminRole!=='admin') return adminPanel();
+ const vf=getPaymentMethod('vodafone'),sa=getPaymentMethod('saudi'),usd=getPaymentMethod('usd');
+ show(`<h2 class="text-xl font-black mb-4">إعدادات الشيفت وطرق الدفع</h2><p class="text-xs text-slate-400 mb-4">سيتم استخدام حساب فودافون للجنيه المصري EGP، وحساب السعودية للريال SAR، وحساب USD للدولار USD تلقائيًا عند اختيار العميل العملة.</p>
+ <div class="grid grid-cols-2 gap-2 mb-3">
+  <button onclick="shift.online=!shift.online;saveShift();adminShift()" class="py-3 rounded-xl ${shift.online?'bg-emerald-500 text-slate-950':'bg-red-500/10 text-red-400'} font-black">${shift.online?'أونلاين':'أوفلاين'}</button>
+  <button onclick="shift.auto=!shift.auto;saveShift();adminShift()" class="py-3 rounded-xl bg-slate-800 font-black">${shift.auto?'التلقائي ON':'التلقائي OFF'}</button>
+ </div>
+ <form onsubmit="saveShiftForm(event)" class="space-y-3">
+  <input id="shiftPhoneAdmin" value="${esc(shift.phone)}" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3" placeholder="رقم فودافون كاش">
+  <div class="border border-slate-700 rounded-2xl p-3">
+   <b>💳 فودافون كاش</b>
+   <label class="flex items-center gap-2 text-xs mt-2"><input id="pmVodafoneEnabled" type="checkbox" ${vf.enabled?'checked':''}> تفعيل الطريقة</label>
+   <textarea id="pmVodafoneDetails" class="w-full mt-2 bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm" placeholder="مثال: رقم فودافون كاش">${esc(vf.details||'رقم فودافون كاش: '+(shift.phone||''))}</textarea>
+  </div>
+  <div class="border border-slate-700 rounded-2xl p-3">
+   <b>🇸🇦 حوالة السعودية</b>
+   <label class="flex items-center gap-2 text-xs mt-2"><input id="pmSaudiEnabled" type="checkbox" ${sa.enabled?'checked':''}> تفعيل الطريقة</label>
+   <textarea id="pmSaudiDetails" class="w-full mt-2 bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm" placeholder="اسم البنك + رقم الحساب/الآيبان">${esc(sa.details||'')}</textarea>
+  </div>
+  <div class="border border-slate-700 rounded-2xl p-3">
+   <b>💵 حوالة USD بالدولار</b>
+   <label class="flex items-center gap-2 text-xs mt-2"><input id="pmUsdEnabled" type="checkbox" ${usd.enabled?'checked':''}> تفعيل الطريقة</label>
+   <textarea id="pmUsdDetails" class="w-full mt-2 bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm" placeholder="اسم البنك/الحساب + بيانات التحويل بالدولار">${esc(usd.details||'')}</textarea>
+  </div>
+  <button class="w-full py-3 rounded-xl bg-emerald-500 text-slate-950 font-black">حفظ كل الإعدادات</button>
+ </form>
+ <button onclick="adminPanel()" class="w-full mt-3 py-3 rounded-xl bg-slate-800 font-bold">رجوع</button>`) 
+}
+
+function saveShiftForm(e){
+ e.preventDefault();
+ shift.phone=document.getElementById('shiftPhoneAdmin').value.trim();
+ const vf=getPaymentMethod('vodafone'),sa=getPaymentMethod('saudi'),usd=getPaymentMethod('usd');
+ vf.enabled=!!document.getElementById('pmVodafoneEnabled')?.checked; vf.details=document.getElementById('pmVodafoneDetails')?.value.trim()||('رقم فودافون كاش: '+shift.phone);
+ sa.enabled=!!document.getElementById('pmSaudiEnabled')?.checked; sa.details=document.getElementById('pmSaudiDetails')?.value.trim();
+ usd.enabled=!!document.getElementById('pmUsdEnabled')?.checked; usd.details=document.getElementById('pmUsdDetails')?.value.trim();
+ paymentMethods.vodafone=vf;paymentMethods.saudi=sa;paymentMethods.usd=usd;
+ savePaymentMethods();saveShift();adminShift()
+}
+function findUserById(e){e.preventDefault();const id=document.getElementById('searchCustomerId').value.trim();const u=usersDB.find(x=>x.id===id);if(!u){alert('لم يتم العثور على هذا الـID');return}show(`<h2 class="text-xl font-black mb-4">بيانات العميل</h2><div class="bg-slate-900 rounded-xl p-4 text-sm"><div>Username: <b>${esc(u.username)}</b></div><div class="mt-2">ID: <b class="font-mono text-emerald-400">${esc(u.id)}</b></div></div><button onclick="adminPanel()" class="w-full mt-4 py-3 rounded-xl bg-slate-800 font-bold">رجوع</button>`)}
+
+function show(c){
+  const main=document.getElementById('adminContent');
+  if(window.adminMode && main){
+    main.innerHTML=c;
+    return;
+  }
+  document.getElementById('modalContent').innerHTML=c;
+  document.getElementById('modal').classList.remove('hide');
+}
+function closeModal(){
+  window.adminMode=false;
+  const modal=document.getElementById('modal');
+  modal.classList.remove('admin-mode');
+  modal.classList.add('hide');
+  modal.innerHTML=`<div class="glass bg-[#0b1220] rounded-3xl w-full max-w-lg p-6 max-h-[92vh] overflow-y-auto scrollbar relative"><button onclick="closeModal()" class="absolute left-5 top-5 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button><div id="modalContent"></div></div>`;
+}
+function logout(){user=null;localStorage.removeItem('lj_user');closeModal();render()}
+function goHome(){window.scrollTo({top:0,behavior:'smooth'})}
+render();
+applySiteBrand();
+</script>
+
+<script>
+/* نسخة البيع: نفس التصميم والوظائف الحالية.
+   ملاحظة: هذه نسخة HTML محلية؛ البيانات محفوظة على الجهاز عبر localStorage.
+   للدفع الحقيقي بين أجهزة العملاء يلزم ربط Backend وقاعدة بيانات وبوابة دفع رسمية.
+*/
+</script>
+
+</body>
+</html>
